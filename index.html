@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Note Pro</title>
+    <link rel="stylesheet" href="resource/css/main.css">
+    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.css">
+</head>
+<body>
+<div id="container">
+    <div id="toolbar">
+        <div class="row">
+            <div id="createNewNote">
+                <button type="button">Create new Note</button>
+            </div>
+            <div id="selectStyle">
+                <label hidden for="displayStyle">Stil</label>
+                <select id="displayStyle">
+                    <option value="blackWhite">BlackWhite-Style</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <ul id="sort">
+                <li>By finish Date</li>
+                <li>By created Date</li>
+                <li>By Importance</li>
+            </ul>
+            <input type="checkbox" id="showFinished"><label for="showFinished">Show finished</label>
+        </div>
+    </div>
+
+    <div id="notesList">
+        <div class="row">
+            <div class="leftCell">
+                <div>Nächsten Mittwoch</div>
+                <div><input type="checkbox" id="finished1" checked><label for="finished1">Finished [ Today ]</label></div>
+            </div>
+            <div class="mainCell">
+                <div>CAS FEE Selbststudium / Projekt Aufgabe erledigen <span class="fa fa-bolt" aria-hidden="true"></span><span class="fa fa-bolt" aria-hidden="true"></span></div>
+                <div>HTML für die note App erstellen.<br>CSS erstellen für die note App. [...]</div>
+            </div>
+            <div>
+                <button onclick="location.href='detail.html';" value="Show detail">Edit</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="leftCell">
+                <div>Heute</div>
+                <div><input type="checkbox" id="finished2"><label for="finished2">Finished</label></div>
+            </div>
+            <div class="mainCell">
+                <div>Einkaufen <span class="fa fa-bolt" aria-hidden="true"></span></div>
+                <div>Butter<br>Eier [...]</div>
+            </div>
+            <div>
+                <button onclick="location.href='detail.html';" value="Show detail">Edit</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="leftCell">
+                <div>Irgendwann</div>
+                <div><input type="checkbox" id="finished3"><label for="finished3">Finished</label></div>
+            </div>
+            <div class="mainCell">
+                <div>Mami anrufen</div>
+                <div>888 888 88 88</div>
+            </div>
+            <div>
+                <button onclick="location.href='detail.html';" value="Show detail">Edit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

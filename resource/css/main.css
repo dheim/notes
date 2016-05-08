@@ -1,0 +1,55 @@
+#container {
+    width: 100%;
+    max-width: 800px;
+}
+
+#toolbar .row {
+    display:flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#createNewNote {
+    flex: 1 1 auto;
+}
+
+#sort {
+    flex: 1 1 auto;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#sort li {
+    display: inline;
+}
+
+#notesList .row {
+    display:flex;
+    padding-top: 10px;
+}
+
+#notesList .row .leftCell {
+    width: 200px;
+}
+
+#notesList .row .mainCell {
+    flex: 1 1 auto;
+}
+
+#detail .row {
+    display:flex;
+    padding-top: 10px;
+}
+
+#detail .row .label {
+    width: 150px;
+}
+
+#detail .row .userInput {
+    flex: 1 1 auto;
+}
+
+.fullWidth {
+    width: 100%;
+}
