@@ -1,0 +1,27 @@
+{
+  "name": "notes",
+  "version": "0.0.1",
+  "description": "Project 1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "lessc resource/less/main.less > resource/css/main.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dheim/notes.git"
+  },
+  "author": "David Heim, Thilo Holzer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dheim/notes/issues"
+  },
+  "homepage": "https://github.com/dheim/notes#readme",
+  "dependencies": {
+    "font-awesome": "^4.6.1",
+    "moment": "^2.13.0"
+  },
+  "devDependencies": {
+    "less": "^2.7.1"
+  }
+}
