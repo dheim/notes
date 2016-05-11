@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Note Pro</title>
+    <link rel="stylesheet" href="/css/form.css">
+</head>
+<body>
+    <div id="container">
+        <div id="detail">
+            <div class="row">
+                <div class="label"><label for="title">Title</label></div>
+                <div class="userInput"><input id="title" type="text" class="fullWidth"></div>
+            </div>
+            <div class="row">
+                <div class="label"><label for="description">Beschreibung</label></div>
+                <div class="userInput"><textarea id="description" class="fullWidth"></textarea></div>
+            </div>
+            <div class="row">
+                <div class="label"><label>Wichtigkeit</label></div>
+                <div class="userInput"><span class="fa fa-bolt" aria-hidden="true"></span><span class="fa fa-bolt" aria-hidden="true"></span></div>
+            </div>
+            <div class="row">
+                <div class="label"><label for="dueDate">Erledigt bis</label></div>
+                <div class="userInput"><input type="date" id="dueDate"></div>
+            </div>
+            <div class="row">
+                <div class="userInput">
+                    <button onclick="location.href='index.html'" class="fullWidth">Speichern</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="userInput">
+                    <button onclick="location.href='index.html'">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/js/form.js"></script>
+</body>
+</html>

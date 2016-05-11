@@ -1,69 +1,3 @@
-@import '../../node_modules/font-awesome/less/font-awesome';
-
-#container {
-    width: 100%;
-    max-width: 940px;
-
-    margin: 0 auto;
-    padding: 10px;
-    box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.75);
-}
-
-#toolbar .row {
-    display:flex;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-#createNewNote {
-    flex: 1 1 auto;
-}
-
-#sort {
-    flex: 1 1 auto;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-#sort li {
-    display: inline;
-}
-
-#notesList .row {
-    display:flex;
-    padding-top: 10px;
-}
-
-#notesList .row .leftCell {
-    width: 200px;
-}
-
-#notesList .row .mainCell {
-    flex: 1 1 auto;
-}
-
-#detail .row {
-    display:flex;
-    padding-top: 10px;
-}
-
-#detail .row .label {
-    width: 150px;
-}
-
-#detail .row .userInput {
-    flex: 1 1 auto;
-}
-
-.fullWidth {
-    width: 100%;
-}
-
-
-
-/*************************************************/
-
 * {
     box-sizing: border-box;
 }
@@ -75,6 +9,18 @@ body {
     cursor: default;
 }
 
+#container {
+    width: 100%;
+    max-width: 940px;
+
+    margin: 0 auto;
+    padding: 10px;
+    box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.75);
+}
+
+.fullWidth {
+    width: 100%;
+}
 
 button {
     padding: 5px 10px;
@@ -99,4 +45,3 @@ input[type=checkbox]::after {
 input[type=checkbox]:checked::after {
     content: '\f046';
 }
-
