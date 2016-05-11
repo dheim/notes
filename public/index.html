@@ -10,7 +10,9 @@
     <div id="toolbar">
         <div class="row">
             <div id="createNewNote">
-                <button type="button">Create new Note</button>
+                <a href="detail.html">
+                    <span class="fa fa-plus"></span> Create new Note
+                </a>
             </div>
             <div id="selectStyle">
                 <label hidden for="displayStyle">Stil</label>
@@ -21,9 +23,9 @@
         </div>
         <div class="row">
             <ul id="sort">
-                <li>By finish Date</li>
-                <li>By created Date</li>
-                <li>By Importance</li>
+                <li><button type="button">By finish Date <span class="fa fa-sort"></span></button></li>
+                <li><button type="button">By created Date <span class="fa fa-sort-desc"></span></button></li>
+                <li><button type="button">By Importance <span class="fa fa-sort-asc"></span></button></li>
             </ul>
             <input type="checkbox" id="showFinished"><label for="showFinished">Show finished</label>
         </div>
@@ -40,7 +42,8 @@
                 <div>HTML für die note App erstellen.<br>CSS erstellen für die note App. [...]</div>
             </div>
             <div>
-                <button onclick="location.href='detail.html';" value="Show detail">Edit</button>
+                <button class="action" aria-label="edit item" onclick="location.href='detail.html';" value="Show detail"><span class="fa fa-edit"></span></button>
+                <button class="action" aria-label="delete item" onclick="confirm('delete item?')" value="Delete detail"><span class="fa fa-trash"></span></button>
             </div>
         </div>
         <div class="row">
@@ -53,7 +56,8 @@
                 <div>Butter<br>Eier [...]</div>
             </div>
             <div>
-                <button onclick="location.href='detail.html';" value="Show detail">Edit</button>
+                <button class="action" aria-label="edit item" onclick="location.href='detail.html';" value="Show detail"><span class="fa fa-edit"></span></button>
+                <button class="action" aria-label="delete item" onclick="confirm('delete item?')" value="Delete detail"><span class="fa fa-trash"></span></button>
             </div>
         </div>
         <div class="row">
@@ -66,7 +70,8 @@
                 <div>888 888 88 88</div>
             </div>
             <div>
-                <button onclick="location.href='detail.html';" value="Show detail">Edit</button>
+                <button class="action" aria-label="edit item" onclick="location.href='detail.html';" value="Show detail"><span class="fa fa-edit"></span></button>
+                <button class="action" aria-label="delete item" onclick="confirm('delete item?')" value="Delete detail"><span class="fa fa-trash"></span></button>
             </div>
         </div>
     </div>

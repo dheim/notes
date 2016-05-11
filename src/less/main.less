@@ -1,9 +1,12 @@
 @import '../../node_modules/font-awesome/less/font-awesome';
 
-
 #container {
     width: 100%;
-    max-width: 800px;
+    max-width: 940px;
+
+    margin: 0 auto;
+    padding: 10px;
+    box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.75);
 }
 
 #toolbar .row {
@@ -56,3 +59,44 @@
 .fullWidth {
     width: 100%;
 }
+
+
+
+/*************************************************/
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 10px;
+    font-family: Helvetica, sans-serif;
+    font-size: 14px;
+    cursor: default;
+}
+
+
+button {
+    padding: 5px 10px;
+}
+
+label {
+    cursor: pointer;
+}
+
+input[type=checkbox] {
+    -webkit-appearance: none;
+    outline: none;
+    width: 14px;
+}
+
+input[type=checkbox]::after {
+    font-family: FontAwesome;
+    content: '\f096';
+    border: none;
+}
+
+input[type=checkbox]:checked::after {
+    content: '\f046';
+}
+
