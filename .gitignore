@@ -1,1 +1,3 @@
 .idea/
+node_modules/
+resource/css/*.css
