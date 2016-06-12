@@ -1,25 +1,128 @@
 require('font-awesome-webpack');
 
-import Notes from './mock.notes';
 
 class List {
-  constructor() {
-    //this.renderNotes();
-  }
+    constructor() {
+        this.baseUrl = 'http://localhost:3000/api/note';
 
-  renderNotes() {
-    let el        = document.getElementById('notes');
-    let template = `${Notes.each((note) => {
+        let client = new XMLHttpRequest();
+        client.open('GET', this.baseUrl, true);
 
-      return `<div class="note">
-        <span>${note.title}</span>
-      </div>`;
-    
-    })}`;
+        let that = this;
+        client.onload = function () {
+            let responseText = client.responseText;
+            let notes = JSON.parse(responseText);
+            that.displayNotesList(notes);
+            that.registerEvents();
+        };
 
-    console.log(template);
-  }
+        client.send(null);
+    }
+
+    registerEvents() {
+        let that = this;
+        let deleteButtons = document.getElementsByName('delete-button');
+        deleteButtons.forEach(function (deleteButton) {
+            let id = deleteButton.getAttribute('data-note-id');
+            deleteButton.addEventListener('click', function () {
+                that.deleteNote(id);
+            });
+        });
+    }
+
+    displayNotesList(notes) {
+        var renderedNotes = this.getRenderedNotesList(notes);
+
+        var notesList = document.getElementById('notesList');
+        notesList.innerHTML = renderedNotes;
+    }
+
+    deleteNote(id) {
+        let fetchOptions = {
+            method: 'DELETE'
+        };
+        let url = `${this.baseUrl}/${id}`;
+
+        fetch(url, fetchOptions).then(function (response) {
+            if (!response.ok) {
+                // TODO show error message to the user
+            }
+        });
+    }
+
+    getRenderedNotesList(notes) {
+        let renderedNotes = '';
+
+        for (let i = 0; i < notes.length; i++) {
+            renderedNotes += this.getRenderedRow(notes[i]);
+        }
+
+        return renderedNotes;
+    }
+
+    getRenderedRow(note) {
+        return `<div id="notesList">
+        <div class="row">
+            <div class="leftCell">
+                <div>${List.getFriendlyDate(note.due)}</div>
+                <div><input type="checkbox" id="finished1" ${note.finished ? 'checked' : ''}><label for="finished1">Finished [ ${List.getFriendlyDate(note.finished)} ]</label></div>
+            </div>
+            <div class="mainCell">
+                <div>${note.title} <span class="fa fa-bolt" aria-hidden="true"></span><span class="fa fa-bolt" aria-hidden="true"></span></div>
+                <div>${note.content}</div>
+            </div>
+            <div>
+                <button class="action" aria-label="edit item" onclick="location.href='form.html';" value="Show detail"><span class="fa fa-edit"></span>Show detail</button>
+                <button name="delete-button" class="action" aria-label="delete item" value="Delete note" data-note-id="${note.id}"><span class="fa fa-trash"></span>Delete note</button>
+            </div>
+        </div>`;
+    }
+
+    static getFriendlyDate(dateAsString) {
+        if (!dateAsString) {
+            return 'irgendwann';
+        }
+
+        let friendlyDateString;
+        let date = new Date(dateAsString);
+        var dayDifference = List.getDayDifference(date);
+
+        if (dayDifference >= -1 && dayDifference <= 1) {
+            friendlyDateString = 'heute';
+        } else if (dayDifference < 7 && dayDifference > 0) {
+            friendlyDateString = `nächsten ${List.getWeekDay(date)}`;
+        } else if (dayDifference < 0 && dayDifference > -7) {
+            friendlyDateString = `letzten ${List.getWeekDay(date)}`;
+        } else {
+            friendlyDateString = `${List.getWeekDay(date)}, ${List.getFormattedDate(date)}`;
+        }
+
+        return friendlyDateString;
+    }
+
+    static getDayDifference(date) {
+        let now = new Date();
+
+        const MS_PER_DAY = 1000 * 60 * 60 * 24;
+        var dayDifference = (date.getTime() - now.getTime()) / MS_PER_DAY;
+        return dayDifference;
+    }
+
+    static getWeekDay(date) {
+        const weekDays = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+        return weekDays[date.getDay()];
+    }
+
+    static getFormattedDate(date) {
+        let day = date.getDate();
+        let month = date.getMonth() + 1; //January is 0!
+        let year = date.getFullYear();
+
+        day = day < 10 ? '0' + day : day;
+        month = month < 10 ? '0' + month : month;
+
+        return `${day}.${month}.${year}`;
+    }
 }
-
 
 new List();

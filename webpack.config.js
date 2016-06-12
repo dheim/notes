@@ -8,7 +8,6 @@ module.exports = {
   entry: {
     list: './src/js/list.js',
     form: './src/js/form.js',
-    notes: './src/js/notes.js'
   },
   output: {
     path: path.join(__dirname, 'public/js/'),

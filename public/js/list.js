@@ -48,37 +48,133 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _mock = __webpack_require__(14);
-
-	var _mock2 = _interopRequireDefault(_mock);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	__webpack_require__(15);
 
 	var List = function () {
-	  function List() {
-	    //this.renderNotes();
+	    function List() {
+	        _classCallCheck(this, List);
 
-	    _classCallCheck(this, List);
-	  }
+	        this.baseUrl = 'http://localhost:3000/api/note';
 
-	  _createClass(List, [{
-	    key: 'renderNotes',
-	    value: function renderNotes() {
-	      var el = document.getElementById('notes');
-	      var template = '' + _mock2.default.each(function (note) {
+	        var client = new XMLHttpRequest();
+	        client.open('GET', this.baseUrl, true);
 
-	        return '<div class="note">\n        <span>' + note.title + '</span>\n      </div>';
-	      });
+	        var that = this;
+	        client.onload = function () {
+	            var responseText = client.responseText;
+	            var notes = JSON.parse(responseText);
+	            that.displayNotesList(notes);
+	            that.registerEvents();
+	        };
 
-	      console.log(template);
+	        client.send(null);
 	    }
-	  }]);
 
-	  return List;
+	    _createClass(List, [{
+	        key: 'registerEvents',
+	        value: function registerEvents() {
+	            var that = this;
+	            var deleteButtons = document.getElementsByName('delete-button');
+	            deleteButtons.forEach(function (deleteButton) {
+	                var id = deleteButton.getAttribute('data-note-id');
+	                deleteButton.addEventListener('click', function () {
+	                    that.deleteNote(id);
+	                });
+	            });
+	        }
+	    }, {
+	        key: 'displayNotesList',
+	        value: function displayNotesList(notes) {
+	            var renderedNotes = this.getRenderedNotesList(notes);
+
+	            var notesList = document.getElementById('notesList');
+	            notesList.innerHTML = renderedNotes;
+	        }
+	    }, {
+	        key: 'deleteNote',
+	        value: function deleteNote(id) {
+	            var fetchOptions = {
+	                method: 'DELETE'
+	            };
+	            var url = this.baseUrl + '/' + id;
+
+	            fetch(url, fetchOptions).then(function (response) {
+	                if (!response.ok) {
+	                    // TODO show error message to the user
+	                }
+	            });
+	        }
+	    }, {
+	        key: 'getRenderedNotesList',
+	        value: function getRenderedNotesList(notes) {
+	            var renderedNotes = '';
+
+	            for (var i = 0; i < notes.length; i++) {
+	                renderedNotes += this.getRenderedRow(notes[i]);
+	            }
+
+	            return renderedNotes;
+	        }
+	    }, {
+	        key: 'getRenderedRow',
+	        value: function getRenderedRow(note) {
+	            return '<div id="notesList">\n        <div class="row">\n            <div class="leftCell">\n                <div>' + List.getFriendlyDate(note.due) + '</div>\n                <div><input type="checkbox" id="finished1" ' + (note.finished ? 'checked' : '') + '><label for="finished1">Finished [ ' + List.getFriendlyDate(note.finished) + ' ]</label></div>\n            </div>\n            <div class="mainCell">\n                <div>' + note.title + ' <span class="fa fa-bolt" aria-hidden="true"></span><span class="fa fa-bolt" aria-hidden="true"></span></div>\n                <div>' + note.content + '</div>\n            </div>\n            <div>\n                <button class="action" aria-label="edit item" onclick="location.href=\'form.html\';" value="Show detail"><span class="fa fa-edit"></span>Show detail</button>\n                <button name="delete-button" class="action" aria-label="delete item" value="Delete note" data-note-id="' + note.id + '"><span class="fa fa-trash"></span>Delete note</button>\n            </div>\n        </div>';
+	        }
+	    }], [{
+	        key: 'getFriendlyDate',
+	        value: function getFriendlyDate(dateAsString) {
+	            if (!dateAsString) {
+	                return 'irgendwann';
+	            }
+
+	            var friendlyDateString = void 0;
+	            var date = new Date(dateAsString);
+	            var dayDifference = List.getDayDifference(date);
+
+	            if (dayDifference >= -1 && dayDifference <= 1) {
+	                friendlyDateString = 'heute';
+	            } else if (dayDifference < 7 && dayDifference > 0) {
+	                friendlyDateString = 'nächsten ' + List.getWeekDay(date);
+	            } else if (dayDifference < 0 && dayDifference > -7) {
+	                friendlyDateString = 'letzten ' + List.getWeekDay(date);
+	            } else {
+	                friendlyDateString = List.getWeekDay(date) + ', ' + List.getFormattedDate(date);
+	            }
+
+	            return friendlyDateString;
+	        }
+	    }, {
+	        key: 'getDayDifference',
+	        value: function getDayDifference(date) {
+	            var now = new Date();
+
+	            var MS_PER_DAY = 1000 * 60 * 60 * 24;
+	            var dayDifference = (date.getTime() - now.getTime()) / MS_PER_DAY;
+	            return dayDifference;
+	        }
+	    }, {
+	        key: 'getWeekDay',
+	        value: function getWeekDay(date) {
+	            var weekDays = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+	            return weekDays[date.getDay()];
+	        }
+	    }, {
+	        key: 'getFormattedDate',
+	        value: function getFormattedDate(date) {
+	            var day = date.getDate();
+	            var month = date.getMonth() + 1; //January is 0!
+	            var year = date.getFullYear();
+
+	            day = day < 10 ? '0' + day : day;
+	            month = month < 10 ? '0' + month : month;
+
+	            return day + '.' + month + '.' + year;
+	        }
+	    }]);
+
+	    return List;
 	}();
 
 	new List();
@@ -97,19 +193,7 @@
 /* 11 */,
 /* 12 */,
 /* 13 */,
-/* 14 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var Notes = [{ id: 1, title: 'Meine erste Notiz', content: 'Dies ist meine erste Notiz', created: new Date(), finished: false }, { id: 2, title: 'Meine zweite Notiz', content: 'Dies ist meine zweite Notiz', created: new Date(), finished: false }];
-
-	exports.default = Notes;
-
-/***/ },
+/* 14 */,
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
