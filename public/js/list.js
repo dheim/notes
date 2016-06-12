@@ -83,6 +83,14 @@
 	                    that.deleteNote(id);
 	                });
 	            });
+
+	            var detailButtons = document.getElementsByName('detail-button');
+	            detailButtons.forEach(function (detailButton) {
+	                var id = detailButton.getAttribute('data-note-id');
+	                detailButton.addEventListener('click', function () {
+	                    location.href = 'form.html?id=' + id;
+	                });
+	            });
 	        }
 	    }, {
 	        key: 'displayNotesList',
@@ -120,7 +128,7 @@
 	    }, {
 	        key: 'getRenderedRow',
 	        value: function getRenderedRow(note) {
-	            return '<div id="notesList">\n        <div class="row">\n            <div class="leftCell">\n                <div>' + List.getFriendlyDate(note.due) + '</div>\n                <div><input type="checkbox" id="finished1" ' + (note.finished ? 'checked' : '') + '><label for="finished1">Finished [ ' + List.getFriendlyDate(note.finished) + ' ]</label></div>\n            </div>\n            <div class="mainCell">\n                <div>' + note.title + ' <span class="fa fa-bolt" aria-hidden="true"></span><span class="fa fa-bolt" aria-hidden="true"></span></div>\n                <div>' + note.content + '</div>\n            </div>\n            <div>\n                <button class="action" aria-label="edit item" onclick="location.href=\'form.html?id=' + note.id + '\';" value="Show detail"><span class="fa fa-edit"></span>Show detail</button>\n                <button name="delete-button" class="action" aria-label="delete item" value="Delete note" data-note-id="' + note.id + '"><span class="fa fa-trash"></span>Delete note</button>\n            </div>\n        </div>';
+	            return '<div id="notesList">\n        <div class="row">\n            <div class="leftCell">\n                <div>' + List.getFriendlyDate(note.due) + '</div>\n                <div><input type="checkbox" id="finished1" ' + (note.finished ? 'checked' : '') + '><label for="finished1">Finished [ ' + List.getFriendlyDate(note.finished) + ' ]</label></div>\n            </div>\n            <div class="mainCell">\n                <div>' + note.title + ' <span class="fa fa-bolt" aria-hidden="true"></span><span class="fa fa-bolt" aria-hidden="true"></span></div>\n                <div>' + note.content + '</div>\n            </div>\n            <div>\n                <button name="detail-button" class="action" aria-label="edit item" value="Show detail" data-note-id="' + note.id + '"><span class="fa fa-edit"></span>Show detail</button>\n                <button name="delete-button" class="action" aria-label="delete item" value="Delete note" data-note-id="' + note.id + '"><span class="fa fa-trash"></span>Delete note</button>\n            </div>\n        </div>';
 	        }
 	    }], [{
 	        key: 'getFriendlyDate',

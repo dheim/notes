@@ -28,6 +28,14 @@ class List {
                 that.deleteNote(id);
             });
         });
+
+        let detailButtons = document.getElementsByName('detail-button');
+        detailButtons.forEach(function (detailButton) {
+            let id = detailButton.getAttribute('data-note-id');
+            detailButton.addEventListener('click', function () {
+                location.href = `form.html?id=${id}`;
+            });
+        });
     }
 
     displayNotesList(notes) {
@@ -72,7 +80,7 @@ class List {
                 <div>${note.content}</div>
             </div>
             <div>
-                <button class="action" aria-label="edit item" onclick="location.href='form.html?id=${note.id}';" value="Show detail"><span class="fa fa-edit"></span>Show detail</button>
+                <button name="detail-button" class="action" aria-label="edit item" value="Show detail" data-note-id="${note.id}"><span class="fa fa-edit"></span>Show detail</button>
                 <button name="delete-button" class="action" aria-label="delete item" value="Delete note" data-note-id="${note.id}"><span class="fa fa-trash"></span>Delete note</button>
             </div>
         </div>`;
