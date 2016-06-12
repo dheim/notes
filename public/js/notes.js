@@ -1,97 +1,130 @@
-'use strict';
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
 
-let url = 'http://localhost:3000/api/note';
-let client = new XMLHttpRequest();
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
 
-client.open('GET', url, true);
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
 
 
-client.onload = function () {
-    let responseText = client.responseText;
-    let notes = JSON.parse(responseText);
-    displayNotesList(notes);
-};
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
 
-client.send(null);
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
 
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
 
-function displayNotesList(notes) {
-    var renderedNotes = getRenderedNotesList(notes);
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports) {
 
-    var notesList = document.getElementById('notesList');
-    notesList.innerHTML = renderedNotes;
-}
+	'use strict';
 
-function getRenderedNotesList(notes) {
-    let renderedNotes = '';
+	var url = 'http://localhost:3000/api/note';
+	var client = new XMLHttpRequest();
 
-    for (let i = 0; i < notes.length; i++) {
-        renderedNotes += getRenderedRow(notes[i]);
-    }
+	client.open('GET', url, true);
 
-    return renderedNotes;
-}
+	client.onload = function () {
+	    var responseText = client.responseText;
+	    var notes = JSON.parse(responseText);
+	    displayNotesList(notes);
+	};
 
-function getRenderedRow(note) {
-    return `<div id="notesList">
-        <div class="row">
-            <div class="leftCell">
-                <div>${getFriendlyDate(note.due)}</div>
-                <div><input type="checkbox" id="finished1" ${note.finished ? 'checked' : ''}><label for="finished1">Finished [ ${getFriendlyDate(note.finished)} ]</label></div>
-            </div>
-            <div class="mainCell">
-                <div>${note.title} <span class="fa fa-bolt" aria-hidden="true"></span><span class="fa fa-bolt" aria-hidden="true"></span></div>
-                <div>${note.content}</div>
-            </div>
-            <div>
-                <button class="action" aria-label="edit item" onclick="location.href='form.html';" value="Show detail"><span class="fa fa-edit"></span>Show detail</button>
-                <button class="action" aria-label="delete item" onclick="confirm('delete item?')" value="Delete detail"><span class="fa fa-trash"></span>Delete detail</button>
-            </div>
-        </div>`;
-}
+	client.send(null);
 
-function getFriendlyDate(dateAsString) {
-    if (!dateAsString) {
-        return 'irgendwann';
-    }
+	function displayNotesList(notes) {
+	    var renderedNotes = getRenderedNotesList(notes);
 
-    let friendlyDateString;
-    let date = new Date(dateAsString);
-    var dayDifference = getDayDifference(date);
+	    var notesList = document.getElementById('notesList');
+	    notesList.innerHTML = renderedNotes;
+	}
 
-    if (dayDifference >= -1 && dayDifference <= 1) {
-        friendlyDateString = 'heute';
-    } else if (dayDifference < 7 && dayDifference > 0) {
-        friendlyDateString = `nächsten ${getWeekDay(date)}`;
-    } else if (dayDifference < 0 && dayDifference > -7) {
-        friendlyDateString = `letzten ${getWeekDay(date)}`;
-    } else {
-        friendlyDateString = `${getWeekDay(date)}, ${getFormattedDate(date)}`;
-    }
+	function getRenderedNotesList(notes) {
+	    var renderedNotes = '';
 
-    return friendlyDateString;
-}
+	    for (var i = 0; i < notes.length; i++) {
+	        renderedNotes += getRenderedRow(notes[i]);
+	    }
 
-function getDayDifference(date) {
-    let now = new Date();
+	    return renderedNotes;
+	}
 
-    const MS_PER_DAY = 1000 * 60 * 60 * 24;
-    var dayDifference = (date.getTime() - now.getTime()) / MS_PER_DAY;
-    return dayDifference;
-}
+	function getRenderedRow(note) {
+	    return '<div id="notesList">\n        <div class="row">\n            <div class="leftCell">\n                <div>' + getFriendlyDate(note.due) + '</div>\n                <div><input type="checkbox" id="finished1" ' + (note.finished ? 'checked' : '') + '><label for="finished1">Finished [ ' + getFriendlyDate(note.finished) + ' ]</label></div>\n            </div>\n            <div class="mainCell">\n                <div>' + note.title + ' <span class="fa fa-bolt" aria-hidden="true"></span><span class="fa fa-bolt" aria-hidden="true"></span></div>\n                <div>' + note.content + '</div>\n            </div>\n            <div>\n                <button class="action" aria-label="edit item" onclick="location.href=\'form.html\';" value="Show detail"><span class="fa fa-edit"></span>Show detail</button>\n                <button class="action" aria-label="delete item" onclick="confirm(\'delete item?\')" value="Delete detail"><span class="fa fa-trash"></span>Delete detail</button>\n            </div>\n        </div>';
+	}
 
-function getWeekDay(date) {
-    const weekDays = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
-    return weekDays[date.getDay()];
-}
+	function getFriendlyDate(dateAsString) {
+	    if (!dateAsString) {
+	        return 'irgendwann';
+	    }
 
-function getFormattedDate(date) {
-    let day = date.getDate();
-    let month = date.getMonth() + 1; //January is 0!
-    let year = date.getFullYear();
+	    var friendlyDateString = void 0;
+	    var date = new Date(dateAsString);
+	    var dayDifference = getDayDifference(date);
 
-    day = day < 10 ? '0' + day : day;
-    month = month <10 ? '0' + month : month;
+	    if (dayDifference >= -1 && dayDifference <= 1) {
+	        friendlyDateString = 'heute';
+	    } else if (dayDifference < 7 && dayDifference > 0) {
+	        friendlyDateString = 'nächsten ' + getWeekDay(date);
+	    } else if (dayDifference < 0 && dayDifference > -7) {
+	        friendlyDateString = 'letzten ' + getWeekDay(date);
+	    } else {
+	        friendlyDateString = getWeekDay(date) + ', ' + getFormattedDate(date);
+	    }
 
-    return `${day}.${month}.${year}`;
-}
+	    return friendlyDateString;
+	}
+
+	function getDayDifference(date) {
+	    var now = new Date();
+
+	    var MS_PER_DAY = 1000 * 60 * 60 * 24;
+	    var dayDifference = (date.getTime() - now.getTime()) / MS_PER_DAY;
+	    return dayDifference;
+	}
+
+	function getWeekDay(date) {
+	    var weekDays = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+	    return weekDays[date.getDay()];
+	}
+
+	function getFormattedDate(date) {
+	    var day = date.getDate();
+	    var month = date.getMonth() + 1; //January is 0!
+	    var year = date.getFullYear();
+
+	    day = day < 10 ? '0' + day : day;
+	    month = month < 10 ? '0' + month : month;
+
+	    return day + '.' + month + '.' + year;
+	}
+
+/***/ }
+/******/ ]);
