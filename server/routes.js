@@ -2,8 +2,8 @@ const express = require('express');
 const router  = express.Router();
 
 const Notes = [
-  {id: 1,title: 'Meine erste Notiz', content: 'Dies ist meine erste Notiz', created: new Date(), finished: null},
-  {id: 2, title: 'Meine zweite Notiz', content: 'Dies ist meine zweite Notiz', created: new Date(), finished: null}
+  {id: 1,title: 'Meine erste Notiz', content: 'Dies ist meine erste Notiz', created: new Date(), due: new Date('2016-06-10'), finished: new Date('2016-06-06')},
+  {id: 2, title: 'Meine zweite Notiz', content: 'Dies ist meine zweite Notiz', created: new Date(), due: new Date(), finished: null}
 ];
 
 function getIndex(id) {

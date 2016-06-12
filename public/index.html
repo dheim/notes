@@ -3,81 +3,44 @@
 <head>
     <meta charset="utf-8">
     <title>Notes</title>
-    <link rel="stylesheet" href="/css/list.css">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 
-    <div id="container">
-        <div id="toolbar">
-            <div class="row">
-                <div id="createNewNote">
-                    <a href="form.html">
-                        <span class="fa fa-plus"></span> Create new Note
-                    </a>
-                </div>
-                <div id="selectStyle">
-                    <label hidden for="displayStyle">Stil</label>
-                    <select id="displayStyle">
-                        <option value="blackWhite">BlackWhite-Style</option>
-                    </select>
-                </div>
+<div id="container">
+    <div id="toolbar">
+        <div class="row">
+            <div id="createNewNote">
+                <a href="form.html">
+                    <span class="fa fa-plus"></span> Create new Note
+                </a>
             </div>
-            <div class="row">
-                <ul id="sort">
-                    <li><button type="button">By finish Date <span class="fa fa-sort"></span></button></li>
-                    <li><button type="button">By created Date <span class="fa fa-sort-desc"></span></button></li>
-                    <li><button type="button">By Importance <span class="fa fa-sort-asc"></span></button></li>
-                </ul>
-                <input type="checkbox" id="showFinished"><label for="showFinished">Show finished</label>
+            <div id="selectStyle">
+                <label hidden for="displayStyle">Stil</label>
+                <select id="displayStyle">
+                    <option value="blackWhite">BlackWhite-Style</option>
+                </select>
             </div>
         </div>
-
-        <div id="notesList">
-            <div class="row">
-                <div class="leftCell">
-                    <div>Nächsten Mittwoch</div>
-                    <div><input type="checkbox" id="finished1" checked><label for="finished1">Finished [ Today ]</label></div>
-                </div>
-                <div class="mainCell">
-                    <div>CAS FEE Selbststudium / Projekt Aufgabe erledigen <span class="fa fa-bolt" aria-hidden="true"></span><span class="fa fa-bolt" aria-hidden="true"></span></div>
-                    <div>HTML für die note App erstellen.<br>CSS erstellen für die note App. [...]</div>
-                </div>
-                <div>
-                    <button class="action" aria-label="edit item" onclick="location.href='form.html';" value="Show detail"><span class="fa fa-edit"></span></button>
-                    <button class="action" aria-label="delete item" onclick="confirm('delete item?')" value="Delete detail"><span class="fa fa-trash"></span></button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="leftCell">
-                    <div>Heute</div>
-                    <div><input type="checkbox" id="finished2"><label for="finished2">Finished</label></div>
-                </div>
-                <div class="mainCell">
-                    <div>Einkaufen <span class="fa fa-bolt" aria-hidden="true"></span></div>
-                    <div>Butter<br>Eier [...]</div>
-                </div>
-                <div>
-                    <button class="action" aria-label="edit item" onclick="location.href='form.html';" value="Show detail"><span class="fa fa-edit"></span></button>
-                    <button class="action" aria-label="delete item" onclick="confirm('delete item?')" value="Delete detail"><span class="fa fa-trash"></span></button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="leftCell">
-                    <div>Irgendwann</div>
-                    <div><input type="checkbox" id="finished3"><label for="finished3">Finished</label></div>
-                </div>
-                <div class="mainCell">
-                    <div>Mami anrufen</div>
-                    <div>888 888 88 88</div>
-                </div>
-                <div>
-                    <button class="action" aria-label="edit item" onclick="location.href='form.html';" value="Show detail"><span class="fa fa-edit"></span></button>
-                    <button class="action" aria-label="delete item" onclick="confirm('delete item?')" value="Delete detail"><span class="fa fa-trash"></span></button>
-                </div>
-            </div>
+        <div class="row">
+            <ul id="sort">
+                <li>
+                    <button type="button">By finish Date <span class="fa fa-sort"></span></button>
+                </li>
+                <li>
+                    <button type="button">By created Date <span class="fa fa-sort-desc"></span></button>
+                </li>
+                <li>
+                    <button type="button">By Importance <span class="fa fa-sort-asc"></span></button>
+                </li>
+            </ul>
+            <input type="checkbox" id="showFinished"><label for="showFinished">Show finished</label>
         </div>
     </div>
 
-    <script type="text/javascript" src="/js/list.js"></script>
+    <div id="notesList"></div>
+</div>
+
+<script type="text/javascript" src="js/notes.js"></script>
 </body>
 </html>
