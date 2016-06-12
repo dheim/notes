@@ -50,7 +50,7 @@ router
 
   })
   .delete('/note/:id', (req, res) => {
-    db.run('delete from notes where id = $id', {$id: req.params.id}, function (err) => {
+    db.run('delete from notes where id = $id', {$id: req.params.id}, (err) => {
       if(err) throw new Error(err);
       res.json(this.changes);
     });
