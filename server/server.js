@@ -3,9 +3,7 @@ const bodyParser      = require('body-parser');
 const methodOverride  = require('method-override');
 const app             = express();
 
-const config = {
-  port: 3000
-};
+const config          = require('./config');
 
 app.use(express.static(__dirname + '/../public', {
   dotfiles: 'ignore'

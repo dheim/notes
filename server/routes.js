@@ -1,66 +1,59 @@
 const express = require('express');
 const router  = express.Router();
+const config  = require('./config');
+const sqlite  = require('sqlite3');
+const path    = require('path');
 
-const Notes = [
-  {id: 1,title: 'Meine erste Notiz', content: 'Dies ist meine erste Notiz', created: new Date(), due: new Date('2016-06-10'), finished: new Date('2016-06-06')},
-  {id: 2, title: 'Meine zweite Notiz', content: 'Dies ist meine zweite Notiz', created: new Date(), due: new Date(), finished: null}
-];
-
-function getIndex(id) {
-  let _index = null;
-  Notes.some( (note, index) => {
-    if (note.id == id) {
-      _index = index;
-      return true;
-    }
-  });
-  return _index;
-}
-
-
+const db      = new sqlite.Database(path.join(__dirname, config.db));            
 
 router
   .get('/note', (req, res) => {
-    res.json(Notes);
+    db.all('select * from notes', (err, rows) => {
+      res.json(rows);
+    });
   })
   .get('/note/:id', (req, res) => {
-    res.json(
-      Notes.filter( (note) => {
-        return note.id == req.params.id;
-      })
-    );
+    db.get(`select * from notes where id = ${req.params.id}`, (err, row) => {
+      res.json(row);
+    });
   })
   .post('/note', (req, res) => {
     let note = req.body;
 
-    note.created  = new Date();
-    note.finished = null;
-    Notes.push(note);
-
-    res.json(note);
+    db.run(`insert into notes (title, description, due, finished) VALUES ($title, $description, $due, $finished)`, {
+      $title: note.title,
+      $description: note.description,
+      due: (note.due) ? note.due : null,
+      finished: (note.finished) ? note.finished : null
+    }, function (err) {
+      res.json(this.changes);
+    });
   })
   .put('/note/:id', (req, res) => {
     let note = req.body;
 
-    let noteIndex = null;
-    Notes.some( (note, index) => {
-      if (note.id == note.id) {
-        noteIndex = index;
-        return true;
-      }
+    db.run(`update notes
+      set title = $title,
+          description = $description,
+          due = $due,
+          finished = $finished
+    where id = $id`, {
+      $id: note.id,
+      $title: note.title,
+      $description: note.description,
+      due: (note.due) ? note.due : null,
+      finished: (note.finished) ? note.finished : null
+    }, function (err) {
+      if(err) throw new Error(err);
+      res.json(this.changes);
     });
-    Notes[noteIndex] = note;
-
-    res.json(note);
 
   })
   .delete('/note/:id', (req, res) => {
-    let index = getIndex(req.params.id);
-    let deletedNotes = Notes.splice(
-      getIndex(req.params.id),
-      1
-    );
-    res.json(deletedNotes);
+    db.run('delete from notes where id = $id', {$id: req.params.id}, function (err) => {
+      if(err) throw new Error(err);
+      res.json(this.changes);
+    });
   });
 
 module.exports = router;
