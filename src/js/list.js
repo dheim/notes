@@ -72,7 +72,7 @@ class List {
                 <div>${note.content}</div>
             </div>
             <div>
-                <button class="action" aria-label="edit item" onclick="location.href='form.html';" value="Show detail"><span class="fa fa-edit"></span>Show detail</button>
+                <button class="action" aria-label="edit item" onclick="location.href='form.html?id=${note.id}';" value="Show detail"><span class="fa fa-edit"></span>Show detail</button>
                 <button name="delete-button" class="action" aria-label="delete item" value="Delete note" data-note-id="${note.id}"><span class="fa fa-trash"></span>Delete note</button>
             </div>
         </div>`;
