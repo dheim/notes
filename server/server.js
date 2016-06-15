@@ -12,7 +12,8 @@ app.use(express.static(__dirname + '/../public', {
 
 app
   .use(bodyParser.json())
-  .use('/api', require('./routes')(app))
-  .listen(config.port, () => {
-    console.log(`Server started on port ${config.port}`);
-  });
+  .use('/api', require('./routes')(app));
+
+server.listen(config.port, () => {
+  console.log(`Server started on port ${config.port}`);
+});

@@ -67,10 +67,7 @@ class Note {
 
 let noteRouter = (app) => {
   const router  = express.Router();
-  const note = new Note();
-
-  app.io.on('connection', (socket) => {
-  });
+  const note    = new Note();
 
   router
     .get('/note', (req, res) => {
@@ -86,21 +83,22 @@ let noteRouter = (app) => {
     .post('/note', (req, res) => {
       note.add(req.body).then( (lastId) => {
         note.get(lastId).then( (row) => {
+          app.io.sockets.emit('added', row);
           res.json(row);
         });
-      }).catch( (err) => {
-        console.log(err);
       });
     })
     .put('/note/:id', (req, res) => {
       note.update(req.body).then( (lastId) => {
         note.get(lastId).then( (row) => {
+          app.io.sockets.emit('updated', row);
           res.json(row);
         });
       });
     })
     .delete('/note/:id', (req, res) => {
       note.delete(req.params.id).then( (lastId) => {
+        app.io.sockets.emit('deleted', lastId);
         res.json(lastId);
       });
     });

@@ -1,5 +1,11 @@
 require('font-awesome-webpack');
+import io from 'socket.io-client';
 
+let socket = io('http://dev.local:3000/api');
+
+socket.on('added', (note) => {});
+socket.on('updated', (note) => {});
+socket.on('deleted', (note) => {});
 
 class List {
     constructor() {
