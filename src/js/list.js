@@ -3,7 +3,7 @@ require('font-awesome-webpack');
 
 class List {
     constructor() {
-        this.baseUrl = 'http://localhost:3000/api/note';
+        this.baseUrl = 'http://dev.local:3000/api/note';
 
         let client = new XMLHttpRequest();
         client.open('GET', this.baseUrl, true);
