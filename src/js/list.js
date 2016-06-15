@@ -14,24 +14,22 @@ class List {
         let client = new XMLHttpRequest();
         client.open('GET', this.baseUrl, true);
 
-        let that = this;
-        client.onload = function () {
+        client.onload = () => {
             let responseText = client.responseText;
             let notes = JSON.parse(responseText);
-            that.displayNotesList(notes);
-            that.registerEvents();
+            this.displayNotesList(notes);
+            this.registerEvents();
         };
 
         client.send(null);
     }
 
     registerEvents() {
-        let that = this;
         let deleteButtons = document.getElementsByName('delete-button');
-        deleteButtons.forEach(function (deleteButton) {
+        deleteButtons.forEach( (deleteButton) => {
             let id = deleteButton.getAttribute('data-note-id');
-            deleteButton.addEventListener('click', function () {
-                that.deleteNote(id);
+            deleteButton.addEventListener('click', () => {
+                this.deleteNote(id);
             });
         });
 
@@ -57,7 +55,7 @@ class List {
         };
         let url = `${this.baseUrl}/${id}`;
 
-        fetch(url, fetchOptions).then(function (response) {
+        fetch(url, fetchOptions).then( (response) => {
             if (!response.ok) {
                 // TODO show error message to the user
             }

@@ -20,21 +20,19 @@ class Form {
     }
 
     registerEvents() {
-        let that = this;
         var saveButton = document.getElementById('saveButton');
-        saveButton.addEventListener('click', function (event) {
-            that.saveNote();
+        saveButton.addEventListener('click', (event) => {
+            this.saveNote();
         });
     }
 
     loadNote(id) {
-        let that = this;
-        fetch(`${that.baseUrl}/${id}`)
-            .then(function (response) {
+        fetch(`${this.baseUrl}/${id}`)
+            .then( (response) => {
                 if (response.ok) {
-                    response.json().then(function (note) {
-                        that.note = note;
-                        that.applyNoteToForm();
+                    response.json().then( (note) => {
+                        this.note = note;
+                        this.applyNoteToForm();
                     })
                 } else {
                     // FIXME show error message to the user
@@ -44,16 +42,15 @@ class Form {
     }
 
     applyNoteToForm() {
-        let that = this;
-        for (var key in this.formElements) {
-            if (this.formElements.hasOwnProperty(key) && that.note[key]) {
-                this.formElements[key].value = that.note[key];
+        for (let key in this.formElements) {
+            if (this.formElements.hasOwnProperty(key) && this.note[key]) {
+                this.formElements[key].value = this.note[key];
             }
         }
     }
 
     applyFormDataToNote() {
-        for (var key in this.formElements) {
+        for (let key in this.formElements) {
             if (this.formElements.hasOwnProperty(key) && this.formElements[key].value) {
                 this.note[key] = this.formElements[key].value;
             }
@@ -61,17 +58,16 @@ class Form {
     }
 
     saveNote() {
-        let that = this;
         this.applyFormDataToNote();
 
-        let fetchOptions = Form.createFetchOptions(that.note);
-        let url = Form.createUrl(that.baseUrl, fetchOptions, that.note);
+        let fetchOptions = Form.createFetchOptions(this.note);
+        let url = Form.createUrl(this.baseUrl, fetchOptions, this.note);
 
         fetch(url, fetchOptions)
-            .then(function (response) {
+            .then( (response) => {
                 if (response.ok) {
-                    return response.json().then(function (note) {
-                        that.applyNoteToForm(note);
+                    return response.json().then( (note) => {
+                        this.applyNoteToForm(note);
                     })
                 } else {
                     // FIXME show error message to the user
