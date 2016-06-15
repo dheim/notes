@@ -10,8 +10,8 @@ module.exports = {
     form: './src/js/form.js',
   },
   output: {
-    path: path.join(__dirname, 'public/js/'),
-    filename: '[name].js'
+    path: path.join(__dirname, 'public/'),
+    filename: 'js/[name].js'
   },
   module: {
     loaders: [
