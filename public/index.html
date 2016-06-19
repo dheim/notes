@@ -25,16 +25,20 @@
         <div class="row">
             <ul id="sort">
                 <li>
-                    <button type="button">By finish Date <span class="fa fa-sort"></span></button>
+                    <button type="button" name="sort-button" data-sort-by="due">By due Date <span name="sorting-icon" class="fa fa-sort"></span></button>
                 </li>
                 <li>
-                    <button type="button">By created Date <span class="fa fa-sort-desc"></span></button>
+                    <button type="button" name="sort-button" data-sort-by="created">By created Date <span name="sorting-icon" class="fa fa-sort-desc"></span></button>
                 </li>
                 <li>
-                    <button type="button">By Importance <span class="fa fa-sort-asc"></span></button>
+                    <button type="button" name="sort-button" data-sort-by="importance">By Importance <span name="sorting-icon" class="fa fa-sort-asc"></span></button>
                 </li>
             </ul>
-            <input type="checkbox" id="showFinished"><label for="showFinished">Show finished</label>
+            <input type="checkbox" id="show-finished-checkbox" checked="checked"><label for="show-finished-checkbox">Show finished</label>
+        </div>
+        <div class="row">
+            <label for="search">Textsuche</label>
+            <input type="text" id="search">
         </div>
     </div>
 

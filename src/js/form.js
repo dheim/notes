@@ -6,12 +6,13 @@ class Form {
         this.formElements = {
             title: document.getElementById('title'),
             description: document.getElementById('description'),
-            due: document.getElementById('due')
+            due: document.getElementById('due'),
+            finished: document.getElementById('finished')
         };
 
         this.registerEvents();
 
-        let id = Form.getUrlQueryParameter('id');
+        let id = this.getUrlQueryParameter('id');
         if (id) {
             this.loadNote(id);
         } else {
@@ -20,17 +21,17 @@ class Form {
     }
 
     registerEvents() {
-        var saveButton = document.getElementById('saveButton');
-        saveButton.addEventListener('click', (event) => {
+        let saveButton = document.getElementById('saveButton');
+        saveButton.addEventListener('click', () => {
             this.saveNote();
         });
     }
 
     loadNote(id) {
         fetch(`${this.baseUrl}/${id}`)
-            .then( (response) => {
+            .then((response) => {
                 if (response.ok) {
-                    response.json().then( (note) => {
+                    response.json().then((note) => {
                         this.note = note;
                         this.applyNoteToForm();
                     })
@@ -60,13 +61,13 @@ class Form {
     saveNote() {
         this.applyFormDataToNote();
 
-        let fetchOptions = Form.createFetchOptions(this.note);
-        let url = Form.createUrl(this.baseUrl, fetchOptions, this.note);
+        let fetchOptions = this.createFetchOptions(this.note);
+        let url = this.createUrl(this.baseUrl, fetchOptions, this.note);
 
         fetch(url, fetchOptions)
-            .then( (response) => {
+            .then((response) => {
                 if (response.ok) {
-                    return response.json().then( (note) => {
+                    return response.json().then((note) => {
                         this.applyNoteToForm(note);
                     })
                 } else {
@@ -75,9 +76,9 @@ class Form {
             });
     }
 
-    static createFetchOptions(entity) {
+    createFetchOptions(entity) {
         let httpMethod = entity.id ? 'PUT' : 'POST';
-        var noteJson = JSON.stringify(entity);
+        let noteJson = JSON.stringify(entity);
 
         return {
             headers: {
@@ -89,7 +90,7 @@ class Form {
         };
     }
 
-    static createUrl(baseUrl, fetchOptions, entity) {
+    createUrl(baseUrl, fetchOptions, entity) {
         if (fetchOptions.method == 'PUT') {
             return `${baseUrl}/${entity.id}`;
         } else {
@@ -97,7 +98,7 @@ class Form {
         }
     }
 
-    static getUrlQueryParameter(name) {
+    getUrlQueryParameter(name) {
         let url = window.location.href;
         name = name.replace(/[\[\]]/g, "\\$&");
         let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
