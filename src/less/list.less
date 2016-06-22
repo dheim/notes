@@ -1,36 +1,31 @@
-@import '../../node_modules/font-awesome/less/font-awesome';
 @import 'main';
 
-#toolbar .row {
-    display:flex;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
+#notesList {
+  border-collapse: collapse;
+  width: 100%;
 
-#createNewNote {
-    flex: 1 1 auto;
-}
+  td {
+    padding: 5px;
+  }
 
-#sort {
-    flex: 1 1 auto;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
+  tr:not(:last-child) {
+    border-bottom: solid lightgrey 1px;
+  }
 
-#sort li {
-    display: inline;
-}
+  .description {
+    width: 60%;
+  }
 
-#notesList .row {
-    display:flex;
-    padding-top: 10px;
-}
+  .due {
+    padding-bottom: 5px;
+  }
 
-#notesList .row .leftCell {
-    width: 200px;
-}
+  .title {
+    padding-bottom: 5px;
+    font-weight: bold;
+  }
 
-#notesList .row .mainCell {
-    flex: 1 1 auto;
+  .icons {
+  text-align: right;
+  }
 }

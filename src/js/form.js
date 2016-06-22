@@ -1,3 +1,7 @@
+require('font-awesome-webpack');
+import io from 'socket.io-client';
+import 'theme/form';
+
 class Form {
 
     constructor() {

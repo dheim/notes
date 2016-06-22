@@ -1,5 +1,6 @@
 require('font-awesome-webpack');
 import io from 'socket.io-client';
+import 'theme/list';
 
 let socket = io('http://dev.local:3000/api');
 

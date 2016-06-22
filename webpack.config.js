@@ -42,10 +42,13 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['', '.js']
+    extensions: ['', '.js', '.less'],
+    alias: {
+      theme: '../../src/less'
+    }
   },
   plugins: [
-    new ExtractTextPlugin('list.css'),
-    new ExtractTextPlugin('form.css')
+    new ExtractTextPlugin('css/list.css'),
+    new ExtractTextPlugin('css/form.css')
   ]
 };
