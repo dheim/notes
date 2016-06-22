@@ -9,39 +9,102 @@ body {
     cursor: default;
 }
 
+a {
+    color: black;
+    text-decoration: none;
+}
+
 #container {
     width: 100%;
-    max-width: 940px;
+    max-width: 800px;
+    margin: auto;
+}
 
-    margin: 0 auto;
-    padding: 10px;
-    box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.75);
+#header {
+    text-align: right;
+    font-size: 3em;
+    padding-bottom: 10px;
+}
+
+#footer {
+    border-top: solid black 1px;
+    text-align: right;
+    padding-top: 10px;
+}
+
+#toolbar {
+    display: flex;
+    border-bottom: solid black 2px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.toolbar-element {
+    flex: 0 1 auto;
+    padding-right: 15px;
+}
+
+.toolbar-element>ul>li {
+    padding-right: 10px;
+}
+
+#toolbar-search {
+    flex: 1 1 auto;
+}
+
+#sort {
+    flex: 0 1 auto;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#sort li {
+    display: inline;
 }
 
 .fullWidth {
     width: 100%;
 }
 
-button {
-    padding: 5px 10px;
+#notesList {
+    border-collapse: collapse;
+    width: 100%;
 }
 
-label {
-    cursor: pointer;
+#notesList td {
+    padding: 5px;
 }
 
-input[type=checkbox] {
-    -webkit-appearance: none;
-    outline: none;
-    width: 14px;
+#notesList tr:not(:last-child) {
+    border-bottom: solid lightgrey 1px;
 }
 
-input[type=checkbox]::after {
-    font-family: FontAwesome;
-    content: '\f096';
-    border: none;
+#notesList .description {
+    width: 60%;
 }
 
-input[type=checkbox]:checked::after {
-    content: '\f046';
+#notesList .due {
+    padding-bottom: 5px;
+}
+
+#notesList .title {
+    padding-bottom: 5px;
+    font-weight: bold;
+}
+
+#notesList .icons {
+    text-align: right;
+}
+
+#form .row {
+    padding-bottom: 10px;
+}
+
+#form .label {
+    margin-bottom: 2px;
+}
+
+#description {
+    height: 100px;
 }
