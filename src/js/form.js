@@ -25,6 +25,17 @@ class Form {
         saveButton.addEventListener('click', () => {
             this.saveNote();
         });
+
+        let saveAndCloseButton = document.getElementById('saveAndCloseButton');
+        saveAndCloseButton.addEventListener('click', () => {
+            this.saveNote();
+            window.location.href = 'index.html';
+        });
+
+        let cancelButton = document.getElementById('cancelButton');
+        cancelButton.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
     }
 
     loadNote(id) {
