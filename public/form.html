@@ -3,44 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>Note Pro</title>
-    <link rel="stylesheet" href="/css/form.css">
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-    <div id="container">
-        <div id="detail">
+<div id="container">
+    <div id="header">
+        notes.
+    </div>
+    <div id="main">
+        <div id="form">
             <div class="row">
                 <div class="label"><label for="title">Title</label></div>
-                <div class="userInput"><input id="title" type="text" class="fullWidth"></div>
+                <div><input id="title" type="text" class="fullWidth"></div>
             </div>
             <div class="row">
                 <div class="label"><label for="description">Beschreibung</label></div>
-                <div class="userInput"><textarea id="description" class="fullWidth"></textarea></div>
+                <div><textarea id="description" class="fullWidth"></textarea></div>
             </div>
             <div class="row">
                 <div class="label"><label>Wichtigkeit</label></div>
-                <div class="userInput"><span class="fa fa-bolt" aria-hidden="true"></span><span class="fa fa-bolt" aria-hidden="true"></span></div>
+                <div><span class="fa fa-bolt" aria-hidden="true"></span><span class="fa fa-bolt" aria-hidden="true"></span></div>
             </div>
             <div class="row">
                 <div class="label"><label for="due">Zu erledigen bis</label></div>
-                <div class="userInput"><input type="date" id="due"></div>
+                <div><input type="date" id="due"></div>
             </div>
             <div class="row">
                 <div class="label"><label for="due">Erledigt am</label></div>
-                <div class="userInput"><input type="date" id="finished"></div>
-            </div>
-            <div class="row">
-                <div class="userInput">
-                    <button id="saveButton" class="fullWidth">Speichern</button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="userInput">
-                    <button onclick="location.href='index.html'">Cancel</button>
-                </div>
+                <div><input type="date" id="finished"></div>
             </div>
         </div>
     </div>
+    <div id="footer">
+        <div>
+            <button id="saveAndCloseButton">OK</button>
+            <button id="saveButton">Übernehmen</button>
+            <button onclick="location.href='index.html'">Abbrechen</button>
+        </div>
+    </div>
+</div>
 
-    <script type="text/javascript" src="/js/form.js"></script>
+<script type="text/javascript" src="/js/form.js"></script>
 </body>
 </html>
