@@ -170,14 +170,14 @@ class List {
                 <div>${this.getDescription(note.description)}</div>
             </td>
             <td class="icons">
-                <a href="form.html?noteId=${note.id}" class="action" aria-label="edit item" title="Show detail"><span class="fa fa-edit"></span></a>
+                <a href="form.html?id=${note.id}" class="action" aria-label="edit item" title="Show detail"><span class="fa fa-edit"></span></a>
                 <a href="#" name="delete-link" class="action" aria-label="delete item" title="Delete note" data-note-id="${note.id}"><span class="fa fa-trash"></span></a>
             </td>
           </tr>`;
     }
 
     getDescription(description) {
-        return description.replace('\n', '<br>');
+        return description.replace(/(?:\r\n|\r|\n)/g, '<br>');
     }
 
     getFriendlyDate(dateAsString) {
