@@ -22,7 +22,8 @@ class List {
             this.allNotes = JSON.parse(responseText);
             this.notesToDisplay = this.allNotes.slice();
             this.sortAscending = true;
-            this.sortNotes('due');
+            this.sortBy = 'due';
+            this.sortNotes();
             this.displayNotesList();
             this.registerPageEvents();
         };
@@ -31,11 +32,19 @@ class List {
     }
 
     registerPageEvents() {
-        let sortButtons = document.getElementsByName('sort-button');
+        let sortButtons = document.getElementsByName('sort-link');
         sortButtons.forEach((sortButton) => {
             sortButton.addEventListener('click', () => {
                 let sortBy = sortButton.getAttribute('data-sort-by');
-                this.sortNotes(sortBy);
+
+                if (sortBy == this.sortBy) {
+                    this.sortAscending = !this.sortAscending;
+                } else {
+                    this.sortBy = sortBy;
+                    this.sortAscending = true;
+                }
+
+                this.sortNotes();
             });
         });
 
@@ -53,25 +62,17 @@ class List {
     }
 
     registerListEvents() {
-        let deleteButtons = document.getElementsByName('delete-button');
+        let deleteButtons = document.getElementsByName('delete-link');
         deleteButtons.forEach((deleteButton) => {
             let noteId = deleteButton.getAttribute('data-note-id');
             deleteButton.addEventListener('click', () => {
                 this.deleteNote(noteId);
             });
         });
-
-        let detailButtons = document.getElementsByName('detail-button');
-        detailButtons.forEach(function (detailButton) {
-            let id = detailButton.getAttribute('data-note-id');
-            detailButton.addEventListener('click', function () {
-                location.href = `form.html?id=${id}`;
-            });
-        });
     }
 
     updateSortButtonIcons() {
-        let sortButtons = document.getElementsByName('sort-button');
+        let sortButtons = document.getElementsByName('sort-link');
         sortButtons.forEach((sortButton) => {
             let cssClass;
 
@@ -96,27 +97,19 @@ class List {
     displayNotesList() {
         let renderedNotes = this.getRenderedNotesList(this.notesToDisplay);
 
-        let notesList = document.getElementById('notesList');
+        let notesList = document.getElementById('notesListBody');
         notesList.innerHTML = renderedNotes;
 
         this.registerListEvents();
     }
 
-    sortNotes(sortBy) {
-        if (this.sortBy == sortBy) {
-            this.sortAscending = !this.sortAscending;
-        } else {
-            this.sortAscending = true;
-        }
-
-        this.sortBy = sortBy;
-
+    sortNotes() {
         this.notesToDisplay.sort((first, second) => {
             let ascendingOrder;
-            if (first[sortBy] && second[sortBy]) {
-                ascendingOrder = first[sortBy] < second[sortBy] ? -1 : 1;
+            if (first[this.sortBy] && second[this.sortBy]) {
+                ascendingOrder = first[this.sortBy] < second[this.sortBy] ? -1 : 1;
             } else {
-                ascendingOrder = first[sortBy] ? 1 : -1;
+                ascendingOrder = first[this.sortBy] ? 1 : -1;
             }
 
             return this.sortAscending ? ascendingOrder : -ascendingOrder;
@@ -130,7 +123,7 @@ class List {
         this.notesToDisplay = this.allNotes.filter((note) => {
             return displayFinished || !note.finished;
         });
-        this.sortNotes(this.sortBy);
+        this.sortNotes();
         this.displayNotesList();
     }
 
@@ -139,7 +132,7 @@ class List {
             return note.title.indexOf(text) >= 0 || note.description.indexOf(text) >= 0;
         });
 
-        this.sortNotes(this.sortBy);
+        this.sortNotes();
         this.displayNotesList();
     }
 
@@ -167,21 +160,24 @@ class List {
     }
 
     getRenderedRow(note) {
-        return `<div id="notesList">
-        <div class="row">
-            <div class="leftCell">
-                <div>${this.getFriendlyDate(note.due)}</div>
+        return `<tr>
+            <td>
+                <div class="due">${this.getFriendlyDate(note.due)}</div>
                 <div><input type="checkbox" id="finished1" ${note.finished ? 'checked' : ''}><label for="finished1">Finished [ ${this.getFriendlyDate(note.finished)} ]</label></div>
-            </div>
-            <div class="mainCell">
-                <div>${note.title} <span class="fa fa-bolt" aria-hidden="true"></span><span class="fa fa-bolt" aria-hidden="true"></span></div>
-                <div>${note.description}</div>
-            </div>
-            <div>
-                <button name="detail-button" class="action" aria-label="edit item" value="Show detail" data-note-id="${note.id}"><span class="fa fa-edit"></span>Show detail</button>
-                <button name="delete-button" class="action" aria-label="delete item" value="Delete note" data-note-id="${note.id}"><span class="fa fa-trash"></span>Delete note</button>
-            </div>
-        </div>`;
+            </td>
+            <td class="description">
+                <div    class="title">${note.title} <span class="fa fa-bolt" aria-hidden="true"></span><span class="fa fa-bolt" aria-hidden="true"></span></div>
+                <div>${this.getDescription(note.description)}</div>
+            </td>
+            <td class="icons">
+                <a href="form.html?noteId=${note.id}" class="action" aria-label="edit item" title="Show detail"><span class="fa fa-edit"></span></a>
+                <a href="#" name="delete-link" class="action" aria-label="delete item" title="Delete note" data-note-id="${note.id}"><span class="fa fa-trash"></span></a>
+            </td>
+          </tr>`;
+    }
+
+    getDescription(description) {
+        return description.replace('\n', '<br>');
     }
 
     getFriendlyDate(dateAsString) {

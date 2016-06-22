@@ -8,41 +8,46 @@
 <body>
 
 <div id="container">
+    <div id="header">
+        notes.
+    </div>
     <div id="toolbar">
-        <div class="row">
-            <div id="createNewNote">
-                <a href="form.html">
-                    <span class="fa fa-plus"></span> Create new Note
-                </a>
-            </div>
-            <div id="selectStyle">
-                <label hidden for="displayStyle">Stil</label>
-                <select id="displayStyle">
-                    <option value="blackWhite">BlackWhite-Style</option>
-                </select>
-            </div>
+        <div class="toolbar-element">
+            <a href="form.html" title="Create new Note" id="new-note"><span class="fa fa-plus"></span></a>
         </div>
-        <div class="row">
+        <div class="toolbar-element">
             <ul id="sort">
                 <li>
-                    <button type="button" name="sort-button" data-sort-by="due">By due Date <span name="sorting-icon" class="fa fa-sort"></span></button>
+                    <a href="#" name="sort-link" data-sort-by="due">Due Date <span name="sorting-icon" class="fa fa-sort"></span></a>
                 </li>
                 <li>
-                    <button type="button" name="sort-button" data-sort-by="created">By created Date <span name="sorting-icon" class="fa fa-sort-desc"></span></button>
+                    <a href="#" name="sort-link" data-sort-by="created">Created Date <span name="sorting-icon" class="fa fa-sort-desc"></span></a>
                 </li>
                 <li>
-                    <button type="button" name="sort-button" data-sort-by="importance">By Importance <span name="sorting-icon" class="fa fa-sort-asc"></span></button>
+                    <a href="#" name="sort-link" data-sort-by="importance">Importance <span name="sorting-icon" class="fa fa-sort-asc"></span></a>
                 </li>
             </ul>
+        </div>
+        <div class="toolbar-element">
             <input type="checkbox" id="show-finished-checkbox" checked="checked"><label for="show-finished-checkbox">Show finished</label>
         </div>
-        <div class="row">
-            <label for="search">Textsuche</label>
-            <input type="text" id="search">
+        <div id="toolbar-search">
+            <input type="text" id="search" class="fullWidth" placeholder="search">
         </div>
     </div>
 
-    <div id="notesList"></div>
+    <div id="main">
+        <table id="notesList">
+            <tbody id="notesListBody"></tbody>
+        </table>
+    </div>
+
+    <div id="footer">
+        <label hidden for="displayStyle">Stil</label>
+        <select id="displayStyle">
+            <option value="blackWhite">BlackWhite-Style</option>
+        </select>
+    </div>
 </div>
 
 <script type="text/javascript" src="js/list.js"></script>
