@@ -48,7 +48,7 @@ class Note {
         $importance: note.importance
       }, function (err) {
         if (err) reject(err);
-        resolve(this.lastID);
+        resolve(note.id);
       });
     });
   }
