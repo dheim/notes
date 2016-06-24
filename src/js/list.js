@@ -139,10 +139,30 @@ class List {
 
         let finishedCheckboxes = document.getElementsByName('finished-checkbox');
         finishedCheckboxes.forEach((finishedCheckbox) => {
-            let noteId = finishedCheckbox.getAttribute('data-note-id');
+            let noteId = parseInt(finishedCheckbox.getAttribute('data-note-id'));
             finishedCheckbox.addEventListener('click', () => {
                 let finished = finishedCheckbox.checked ? new Date() : null;
+                this.updateFinishedDate(noteId, finished);
             });
+        });
+    }
+
+    updateFinishedDate(noteId, finished) {
+        let note = this.getNoteById(noteId);
+        note.finished = finished;
+        this.updateNote(note);
+    }
+
+    updateNote(note) {
+        var noteService = new NoteService();
+        noteService.save(note).then((response) => {
+            if (response.ok) {
+                return response.json().then(() => {
+                    this.updateList();
+                })
+            } else {
+                // FIXME show error message to the user
+            }
         });
     }
 
@@ -278,6 +298,48 @@ class List {
 
         return -1;
     }
+
+    getNoteById(id) {
+        for (let i = 0; i < this.allNotes.length; i++) {
+            if (this.allNotes[i].id === id) {
+                return this.allNotes[i];
+            }
+        }
+    }
 }
 
 new List();
+
+class NoteService {
+    constructor() {
+        this.baseUrl = 'http://dev.local:3000/api/note';
+    }
+
+    save(note) {
+        let fetchOptions = this.createFetchOptions(note);
+        let url = this.createUrl(fetchOptions, note);
+        return fetch(url, fetchOptions);
+    }
+
+    createFetchOptions(entity) {
+        let httpMethod = entity.id ? 'PUT' : 'POST';
+        let noteJson = JSON.stringify(entity);
+
+        return {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: httpMethod,
+            body: noteJson
+        };
+    }
+
+    createUrl(fetchOptions, entity) {
+        if (fetchOptions.method == 'PUT') {
+            return `${this.baseUrl}/${entity.id}`;
+        } else {
+            return this.baseUrl;
+        }
+    }
+}
