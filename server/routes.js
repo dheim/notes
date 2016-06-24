@@ -24,11 +24,12 @@ class Note {
 
   add(note) {
     return new Promise( (resolve, reject) => {
-      db.run('INSERT INTO notes (title, description, due, finished) VALUES ($title, $description, $due, $finished)', {
+      db.run('INSERT INTO notes (title, description, due, finished, importance) VALUES ($title, $description, $due, $finished, $importance)', {
         $title: note.title,
         $description: note.description,
         $due: (note.due) ? note.due : null,
-        $finished: (note.finished) ? note.finished : null
+        $finished: (note.finished) ? note.finished : null,
+        $importance: note.importance
       }, (err) => {
         if (err) reject(err);
         resolve(this.lastID);
@@ -38,12 +39,13 @@ class Note {
 
   update(note) {
     return new Promise( (resolve, reject) => {
-      db.run('UPDATE notes SET title = $title, description = $description, due = $due, finished = $finished WHERE id = $id', {
+      db.run('UPDATE notes SET title = $title, description = $description, due = $due, finished = $finished, importance = $importance WHERE id = $id', {
         $id: note.id,
         $title: note.title,
         $description: note.description,
         $due: (note.due) ? note.due : null,
-        $finished: (note.finished) ? note.finished : null
+        $finished: (note.finished) ? note.finished : null,
+        $importance: note.importance
       }, (err) => {
         if (err) reject(err);
         resolve(this.lastID);

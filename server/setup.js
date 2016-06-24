@@ -12,6 +12,7 @@ db.run(`create table notes (
   description TEXT NOT NULL,
   created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   due DATETIME NULL,
+  importance NUMBER DEFAULT 0,
   finished DATETIME NULL
 )`);
 
