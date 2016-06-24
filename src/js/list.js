@@ -5,10 +5,30 @@ import 'theme/list';
 let socket = io('http://dev.local:3000/api');
 
 socket.on('added', (note) => {
+    if (this.allNotes) {
+        this.allNotes.push(note);
+        this.updateList();
+    }
 });
-socket.on('updated', (note) => {
+socket.on('updated', (updatedNote) => {
+    if (this.allNotes) {
+        var index = this.getIndexOfNote(updatedNote);
+
+        if (index > -1) {
+            this.allNotes[i] = updatedNote;
+            this.updateList();
+        }
+    }
 });
 socket.on('deleted', (note) => {
+    if (this.allNotes) {
+        var index = this.getIndexOfNote(note);
+
+        if (index > -1) {
+            this.allNotes.splice(index, 1)
+            this.updateList();
+        }
+    }
 });
 
 class List {
@@ -24,19 +44,66 @@ class List {
             this.notesToDisplay = this.allNotes.slice();
             this.sortAscending = true;
             this.sortBy = 'due';
-            this.sortNotes();
-            this.displayNotesList();
+            this.filter = {
+                displayFinished: true,
+                searchTerm: ''
+            };
             this.registerPageEvents();
+            this.updateList();
         };
 
         client.send(null);
     }
 
+    updateList() {
+        this.applyFilters();
+        this.sortList();
+        this.renderList();
+    }
+
+    applyFilters() {
+        this.notesToDisplay = this.allNotes.filter((note) => {
+            return this.filter.displayFinished || !note.finished;
+        });
+
+        var searchTerm = this.filter.searchTerm;
+        if (searchTerm) {
+            this.notesToDisplay = this.allNotes.filter((note) => {
+                return note.title.indexOf(searchTerm) >= 0 || note.description.indexOf(searchTerm) >= 0;
+            });
+        }
+    }
+
+    sortList() {
+        this.notesToDisplay.sort((first, second) => {
+            let ascendingOrder;
+            if (first[this.sortBy] && second[this.sortBy]) {
+                ascendingOrder = first[this.sortBy] < second[this.sortBy] ? -1 : 1;
+            } else {
+                ascendingOrder = first[this.sortBy] ? 1 : -1;
+            }
+
+            return this.sortAscending ? ascendingOrder : -ascendingOrder;
+        });
+
+        this.updateSortButtonIcons();
+        this.renderList();
+    }
+
+    renderList() {
+        let renderedNotes = this.getRenderedNotesList(this.notesToDisplay);
+
+        let notesList = document.getElementById('notesListBody');
+        notesList.innerHTML = renderedNotes;
+
+        this.registerListEvents();
+    }
+
     registerPageEvents() {
-        let sortButtons = document.getElementsByName('sort-link');
-        sortButtons.forEach((sortButton) => {
-            sortButton.addEventListener('click', () => {
-                let sortBy = sortButton.getAttribute('data-sort-by');
+        let sortLinks = document.getElementsByName('sort-link');
+        sortLinks.forEach((sortLink) => {
+            sortLink.addEventListener('click', () => {
+                let sortBy = sortLink.getAttribute('data-sort-by');
 
                 if (sortBy == this.sortBy) {
                     this.sortAscending = !this.sortAscending;
@@ -44,8 +111,7 @@ class List {
                     this.sortBy = sortBy;
                     this.sortAscending = true;
                 }
-
-                this.sortNotes();
+                this.updateList();
             });
         });
 
@@ -63,11 +129,19 @@ class List {
     }
 
     registerListEvents() {
-        let deleteButtons = document.getElementsByName('delete-link');
-        deleteButtons.forEach((deleteButton) => {
-            let noteId = deleteButton.getAttribute('data-note-id');
-            deleteButton.addEventListener('click', () => {
+        let deleteLinks = document.getElementsByName('delete-link');
+        deleteLinks.forEach((deleteLink) => {
+            let noteId = deleteLink.getAttribute('data-note-id');
+            deleteLink.addEventListener('click', () => {
                 this.deleteNote(noteId);
+            });
+        });
+
+        let finishedCheckboxes = document.getElementsByName('finished-checkbox');
+        finishedCheckboxes.forEach((finishedCheckbox) => {
+            let noteId = finishedCheckbox.getAttribute('data-note-id');
+            finishedCheckbox.addEventListener('click', () => {
+                let finished = finishedCheckbox.checked ? new Date() : null;
             });
         });
     }
@@ -95,46 +169,14 @@ class List {
         element.className = element.className.replace(/(?:^|\s)fa-sort\S*/g, newCssClass);
     }
 
-    displayNotesList() {
-        let renderedNotes = this.getRenderedNotesList(this.notesToDisplay);
-
-        let notesList = document.getElementById('notesListBody');
-        notesList.innerHTML = renderedNotes;
-
-        this.registerListEvents();
-    }
-
-    sortNotes() {
-        this.notesToDisplay.sort((first, second) => {
-            let ascendingOrder;
-            if (first[this.sortBy] && second[this.sortBy]) {
-                ascendingOrder = first[this.sortBy] < second[this.sortBy] ? -1 : 1;
-            } else {
-                ascendingOrder = first[this.sortBy] ? 1 : -1;
-            }
-
-            return this.sortAscending ? ascendingOrder : -ascendingOrder;
-        });
-
-        this.updateSortButtonIcons();
-        this.displayNotesList();
-    }
-
     filterByFinishedState(displayFinished) {
-        this.notesToDisplay = this.allNotes.filter((note) => {
-            return displayFinished || !note.finished;
-        });
-        this.sortNotes();
-        this.displayNotesList();
+        this.filter.displayFinished = displayFinished;
+        this.updateList();
     }
 
-    filterBySearchTerm(text) {
-        this.notesToDisplay = this.allNotes.filter((note) => {
-            return note.title.indexOf(text) >= 0 || note.description.indexOf(text) >= 0;
-        });
-
-        this.sortNotes();
-        this.displayNotesList();
+    filterBySearchTerm(searchTerm) {
+        this.filter.searchTerm = searchTerm;
+        this.updateList();
     }
 
     deleteNote(id) {
@@ -164,7 +206,7 @@ class List {
         return `<tr>
             <td>
                 <div class="due">${this.getFriendlyDate(note.due)}</div>
-                <div><input type="checkbox" id="finished1" ${note.finished ? 'checked' : ''}><label for="finished1">Finished [ ${this.getFriendlyDate(note.finished)} ]</label></div>
+                <div><input type="checkbox" name="finished-checkbox" data-note-id="${note.id}" ${note.finished ? 'checked' : ''}><label for="finished1">Finished ${note.finished ? '[' + this.getFriendlyDate(note.finished) + ']' : ''}</label></div>
             </td>
             <td class="description">
                 <div    class="title">${note.title} <span class="fa fa-bolt" aria-hidden="true"></span><span class="fa fa-bolt" aria-hidden="true"></span></div>
@@ -225,6 +267,16 @@ class List {
         month = month < 10 ? '0' + month : month;
 
         return `${day}.${month}.${year}`;
+    }
+
+    getIndexOfNote(note) {
+        for (let i = 0; i < this.allNotes.length; i++) {
+            if (this.allNotes[i].id === note.id) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }
 
