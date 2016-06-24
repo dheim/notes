@@ -127,19 +127,23 @@ class Form {
     renderImportance() {
         var divImportance = document.getElementById('importance');
 
-        let numberOfFilledFlashes = this.note.importance ? this.note.importance : 0;
-        let numberOfGreyFlashes = 5 - numberOfFilledFlashes;
         let renderedImportance = '';
         
-        for (let i = 0; i < numberOfFilledFlashes; i++) {
-            renderedImportance += '<span class="fa fa-bolt" aria-hidden="true">';
-        }
-
-        for (let i = 0; i < numberOfGreyFlashes; i++) {
-            renderedImportance += '<span class="fa fa-bolt grey" aria-hidden="true">';
+        for (let i = 0; i < 5; i++) {
+            renderedImportance += `<a href="#" name="importance-flash" data-importance="${i + 1}"<span class="fa fa-bolt ${i < this.note.importance ? '' : 'grey'}" aria-hidden="true"></a>`;
         }
 
         divImportance.innerHTML = renderedImportance;
+
+        let importanceFlashes = document.getElementsByName('importance-flash');
+
+        importanceFlashes.forEach((importanceFlash) => {
+           importanceFlash.addEventListener('click', (e) => {
+               let importance = parseInt(importanceFlash.getAttribute('data-importance'));
+               this.note.importance = importance;
+               this.applyNoteToForm();
+           }) ;
+        });
     }
 }
 
