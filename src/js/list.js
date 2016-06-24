@@ -3,31 +3,35 @@ import NoteService from './NoteService';
 import 'theme/list';
 require('font-awesome-webpack');
 
-let socket = io('http://dev.local:3000/api');
+let socket = io('http://dev.local:3000');
 
 socket.on('added', (note) => {
-    if (this.allNotes) {
-        this.allNotes.push(note);
-        this.updateList();
+    if (listInstance.allNotes) {
+        listInstance.allNotes.push(note);
+        listInstance.updateList();
     }
 });
 socket.on('updated', (updatedNote) => {
-    if (this.allNotes) {
-        var index = this.getIndexOfNote(updatedNote);
+    if (listInstance.allNotes) {
+        let index = listInstance.getIndexOfNote(updatedNote);
 
         if (index > -1) {
-            this.allNotes[i] = updatedNote;
-            this.updateList();
+            listInstance.allNotes[index] = updatedNote;
+            listInstance.updateList();
         }
     }
 });
-socket.on('deleted', (note) => {
-    if (this.allNotes) {
-        var index = this.getIndexOfNote(note);
-
+socket.on('deleted', (id) => {
+    if (listInstance.allNotes) {
+        let index;
+        listInstance.allNotes.some( (note, i) => {
+            if (note.id == id) {
+                index = i;
+            }
+        });
         if (index > -1) {
-            this.allNotes.splice(index, 1)
-            this.updateList();
+            listInstance.allNotes.splice(index, 1)
+            listInstance.updateList();
         }
     }
 });
@@ -317,4 +321,4 @@ class List {
     }
 }
 
-new List();
+const listInstance = new List();
