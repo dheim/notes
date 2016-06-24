@@ -63,6 +63,7 @@ class Form {
                 this.formElements[key].value = this.note[key];
             }
         }
+        this.renderImportance();
     }
 
     applyFormDataToNote() {
@@ -121,6 +122,24 @@ class Form {
         if (!results) return null;
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+    
+    renderImportance() {
+        var divImportance = document.getElementById('importance');
+
+        let numberOfFilledFlashes = this.note.importance ? this.note.importance : 0;
+        let numberOfGreyFlashes = 5 - numberOfFilledFlashes;
+        let renderedImportance = '';
+        
+        for (let i = 0; i < numberOfFilledFlashes; i++) {
+            renderedImportance += '<span class="fa fa-bolt" aria-hidden="true">';
+        }
+
+        for (let i = 0; i < numberOfGreyFlashes; i++) {
+            renderedImportance += '<span class="fa fa-bolt grey" aria-hidden="true">';
+        }
+
+        divImportance.innerHTML = renderedImportance;
     }
 }
 
