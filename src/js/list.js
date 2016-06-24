@@ -5,59 +5,61 @@ require('font-awesome-webpack');
 
 let socket = io('http://dev.local:3000');
 
-socket.on('added', (note) => {
-    if (listInstance.allNotes) {
+    socket.on('added', (note) => {
         listInstance.allNotes.push(note);
         listInstance.updateList();
-    }
-});
-socket.on('updated', (updatedNote) => {
-    if (listInstance.allNotes) {
+    });
+    socket.on('updated', (updatedNote) => {
         let index = listInstance.getIndexOfNote(updatedNote);
 
         if (index > -1) {
             listInstance.allNotes[index] = updatedNote;
             listInstance.updateList();
         }
-    }
-});
-socket.on('deleted', (id) => {
-    if (listInstance.allNotes) {
-        let index;
-        listInstance.allNotes.some( (note, i) => {
+    });
+    socket.on('deleted', (id) => {
+        let index = -1;
+        listInstance.allNotes.some((note, i) => {
             if (note.id == id) {
                 index = i;
             }
         });
         if (index > -1) {
-            listInstance.allNotes.splice(index, 1)
+            listInstance.allNotes.splice(index, 1);
             listInstance.updateList();
         }
-    }
-});
+    });
 
 class List {
     constructor() {
-        this.baseUrl = 'http://dev.local:3000/api/note';
+        this.noteService = new NoteService();
+        this.allNotes = [];
+        this.filter = {};
+        this.sorting = {};
 
-        let client = new XMLHttpRequest();
-        client.open('GET', this.baseUrl, true);
+        this.noteService.getAll()
+            .then((response) => {
+                response.json().then((notes) => {
+                    this.initializeList(notes);
+                })
+            }).catch((error) => {
+            // TODO show error message to the user
+        });
+    }
 
-        client.onload = () => {
-            let responseText = client.responseText;
-            this.allNotes = JSON.parse(responseText);
-            this.notesToDisplay = this.allNotes.slice();
-            this.sortAscending = true;
-            this.sortBy = 'due';
-            this.filter = {
-                displayFinished: true,
-                searchTerm: ''
-            };
-            this.registerPageEvents();
-            this.updateList();
+    initializeList(notes) {
+        this.allNotes = notes;
+        this.notesToDisplay = this.allNotes.slice();
+        this.sorting = {
+            sortAscending: true,
+            sortBy: 'due'
         };
-
-        client.send(null);
+        this.filter = {
+            displayFinished: true,
+            searchTerm: ''
+        };
+        this.registerPageEvents();
+        this.updateList();
     }
 
     updateList() {
@@ -71,7 +73,7 @@ class List {
             return this.filter.displayFinished || !note.finished;
         });
 
-        var searchTerm = this.filter.searchTerm;
+        let searchTerm = this.filter.searchTerm;
         if (searchTerm) {
             searchTerm = searchTerm.toLowerCase();
             this.notesToDisplay = this.allNotes.filter((note) => {
@@ -83,13 +85,13 @@ class List {
     sortList() {
         this.notesToDisplay.sort((first, second) => {
             let ascendingOrder;
-            if (first[this.sortBy] && second[this.sortBy]) {
-                ascendingOrder = first[this.sortBy] < second[this.sortBy] ? -1 : 1;
+            if (first[this.sorting.sortBy] && second[this.sorting.sortBy]) {
+                ascendingOrder = first[this.sorting.sortBy] < second[this.sorting.sortBy] ? -1 : 1;
             } else {
-                ascendingOrder = first[this.sortBy] ? 1 : -1;
+                ascendingOrder = first[this.sorting.sortBy] ? 1 : -1;
             }
 
-            return this.sortAscending ? ascendingOrder : -ascendingOrder;
+            return this.sorting.sortAscending ? ascendingOrder : -ascendingOrder;
         });
 
         this.updateSortButtonIcons();
@@ -111,11 +113,11 @@ class List {
             sortLink.addEventListener('click', () => {
                 let sortBy = sortLink.getAttribute('data-sort-by');
 
-                if (sortBy == this.sortBy) {
-                    this.sortAscending = !this.sortAscending;
+                if (sortBy == this.sorting.sortBy) {
+                    this.sorting.sortAscending = !this.sorting.sortAscending;
                 } else {
-                    this.sortBy = sortBy;
-                    this.sortAscending = true;
+                    this.sorting.sortBy = sortBy;
+                    this.sorting.sortAscending = true;
                 }
                 this.updateList();
             });
@@ -147,8 +149,17 @@ class List {
         finishedCheckboxes.forEach((finishedCheckbox) => {
             let noteId = parseInt(finishedCheckbox.getAttribute('data-note-id'));
             finishedCheckbox.addEventListener('click', () => {
-                let finished = finishedCheckbox.checked ? new Date() : null;
-                this.updateFinishedDate(noteId, finished);
+                let finishDate;
+
+                if (finishedCheckbox.checked) {
+                    let today = finishedCheckbox.checked ? new Date() : null;
+                    let dateParts = this.getDateParts(today);
+                    finishDate = `${dateParts.year}-${dateParts.month}-${dateParts.day}`;
+                } else {
+                    finishDate = null;
+                }
+
+                this.updateFinishedDate(noteId, finishDate);
             });
         });
     }
@@ -160,8 +171,7 @@ class List {
     }
 
     updateNote(note) {
-        var noteService = new NoteService();
-        noteService.save(note).then((response) => {
+        this.noteService.save(note).then((response) => {
             if (response.ok) {
                 return response.json().then(() => {
                     this.updateList();
@@ -177,13 +187,13 @@ class List {
         sortButtons.forEach((sortButton) => {
             let cssClass;
 
-            if (sortButton.getAttribute('data-sort-by') == this.sortBy) {
-                cssClass = this.sortAscending ? 'fa-sort-asc' : 'fa-sort-desc';
+            if (sortButton.getAttribute('data-sort-by') == this.sorting.sortBy) {
+                cssClass = this.sorting.sortAscending ? 'fa-sort-asc' : 'fa-sort-desc';
             } else {
                 cssClass = 'fa-sort';
             }
 
-            var sortingIcon = sortButton.querySelectorAll("[name=sorting-icon]")[0];
+            let sortingIcon = sortButton.querySelectorAll("[name=sorting-icon]")[0];
 
             if (sortingIcon) {
                 this.replaceSortingCssClass(sortingIcon, ' ' + cssClass);
@@ -192,6 +202,7 @@ class List {
     }
 
     replaceSortingCssClass(element, newCssClass) {
+        // element.classList.*
         element.className = element.className.replace(/(?:^|\s)fa-sort\S*/g, newCssClass);
     }
 
@@ -206,33 +217,27 @@ class List {
     }
 
     deleteNote(id) {
-        let fetchOptions = {
-            method: 'DELETE'
-        };
-        let url = `${this.baseUrl}/${id}`;
-
-        fetch(url, fetchOptions).then((response) => {
-            if (!response.ok) {
-                // TODO show error message to the user
-            }
+        this.noteService.deleteNote(id).then((response) => {
+            
+        }).catch((error) => {
+            // TODO show error message to the user
         });
     }
 
     getRenderedNotesList(notes) {
         let renderedNotes = '';
 
-        for (let i = 0; i < notes.length; i++) {
-            renderedNotes += this.getRenderedRow(notes[i]);
+        for (let note of notes) {
+            renderedNotes += this.getRenderedRow(note);
         }
 
         return renderedNotes;
     }
 
     getRenderedRow(note) {
-
         let importanceHtml = [];
         const importanceTpl = `<span class="fa fa-bolt" aria-hidden="true"></span>`;
-        for (let i = 0; i<note.importance;i++) {
+        for (let i = 0; i < note.importance; i++) {
             importanceHtml.push(importanceTpl);
         }
 
@@ -292,6 +297,11 @@ class List {
     }
 
     getFormattedDate(date) {
+        let dateParts = this.getDateParts(date);
+        return `${dateParts.day}.${dateParts.month}.${dateParts.year}`;
+    }
+
+    getDateParts(date) {
         let day = date.getDate();
         let month = date.getMonth() + 1; //January is 0!
         let year = date.getFullYear();
@@ -299,7 +309,11 @@ class List {
         day = day < 10 ? '0' + day : day;
         month = month < 10 ? '0' + month : month;
 
-        return `${day}.${month}.${year}`;
+        return {
+            day: day,
+            month: month,
+            year: year
+        }
     }
 
     getIndexOfNote(note) {
@@ -322,3 +336,4 @@ class List {
 }
 
 const listInstance = new List();
+

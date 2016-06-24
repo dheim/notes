@@ -3,9 +3,26 @@ class NoteService {
         this.baseUrl = 'http://dev.local:3000/api/note';
     }
 
+    get(id) {
+        return fetch(`${this.baseUrl}/${id}`);
+    }
+
+    getAll() {
+        return fetch(this.baseUrl);
+    }
+
     save(note) {
         let fetchOptions = this.createFetchOptions(note);
         let url = this.createUrl(fetchOptions, note);
+        return fetch(url, fetchOptions);
+    }
+
+    deleteNote(id) {
+        let fetchOptions = {
+            method: 'DELETE'
+        };
+        let url = `${this.baseUrl}/${id}`;
+
         return fetch(url, fetchOptions);
     }
 
