@@ -69,8 +69,9 @@ class List {
 
         var searchTerm = this.filter.searchTerm;
         if (searchTerm) {
+            searchTerm = searchTerm.toLowerCase();
             this.notesToDisplay = this.allNotes.filter((note) => {
-                return note.title.indexOf(searchTerm) >= 0 || note.description.indexOf(searchTerm) >= 0;
+                return note.title.toLowerCase().indexOf(searchTerm) >= 0 || note.description.toLowerCase().indexOf(searchTerm) >= 0;
             });
         }
     }
