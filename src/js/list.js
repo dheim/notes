@@ -223,13 +223,20 @@ class List {
     }
 
     getRenderedRow(note) {
+
+        let importanceHtml = [];
+        const importanceTpl = `<span class="fa fa-bolt" aria-hidden="true"></span>`;
+        for (let i = 0; i<note.importance;i++) {
+            importanceHtml.push(importanceTpl);
+        }
+
         return `<tr>
             <td>
                 <div class="due">${this.getFriendlyDate(note.due)}</div>
                 <div><input type="checkbox" name="finished-checkbox" data-note-id="${note.id}" ${note.finished ? 'checked' : ''}><label for="finished1">Finished ${note.finished ? '[' + this.getFriendlyDate(note.finished) + ']' : ''}</label></div>
             </td>
             <td class="description">
-                <div    class="title">${note.title} <span class="fa fa-bolt" aria-hidden="true"></span><span class="fa fa-bolt" aria-hidden="true"></span></div>
+                <div    class="title">${note.title} ${importanceHtml.join('')}</div>
                 <div>${this.getDescription(note.description)}</div>
             </td>
             <td class="icons">
