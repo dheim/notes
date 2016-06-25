@@ -3,6 +3,7 @@ import NoteService from './NoteService';
 import 'theme/list';
 require('font-awesome-webpack');
 require('babel-polyfill');
+require('nodep-date-input-polyfill');
 
 let socket = io('http://dev.local:3000');
 

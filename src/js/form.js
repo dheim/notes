@@ -1,5 +1,6 @@
 require('font-awesome-webpack');
 require('babel-polyfill');
+require('nodep-date-input-polyfill');
 import NoteService from './NoteService';
 import 'theme/form';
 

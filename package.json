@@ -25,6 +25,7 @@
     "handlebars": "^4.0.5",
     "method-override": "^2.3.6",
     "moment": "^2.13.0",
+    "nodep-date-input-polyfill": "^2.15.2",
     "socket.io": "^1.4.6",
     "sqlite3": "^3.1.4",
     "whatwg-fetch": "^1.0.0"
