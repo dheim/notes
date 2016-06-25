@@ -2,6 +2,7 @@ import io from 'socket.io-client';
 import NoteService from './NoteService';
 import 'theme/list';
 require('font-awesome-webpack');
+require('babel-polyfill');
 
 let socket = io('http://dev.local:3000');
 

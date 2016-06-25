@@ -1,4 +1,5 @@
 require('font-awesome-webpack');
+require('babel-polyfill');
 import NoteService from './NoteService';
 import 'theme/form';
 
