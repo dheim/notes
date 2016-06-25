@@ -105,12 +105,12 @@ class Form {
 
         let importanceFlashes = document.getElementsByName('importance-flash');
 
-        importanceFlashes.forEach((importanceFlash) => {
+        for (importanceFlash of importanceFlashes) {
            importanceFlash.addEventListener('click', () => {
                this.note.importance = parseInt(importanceFlash.getAttribute('data-importance'));
                this.applyNoteToForm();
            }) ;
-        });
+        }
     }
 
     getUrlQueryParameter(name) {

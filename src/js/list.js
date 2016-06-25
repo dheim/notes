@@ -109,19 +109,17 @@ class List {
 
     registerPageEvents() {
         let sortLinks = document.getElementsByName('sort-link');
-        sortLinks.forEach((sortLink) => {
+        for (let sortLink of sortLinks) {
             sortLink.addEventListener('click', () => {
                 let sortBy = sortLink.getAttribute('data-sort-by');
-
                 if (sortBy == this.sorting.sortBy) {
                     this.sorting.sortAscending = !this.sorting.sortAscending;
                 } else {
                     this.sorting.sortBy = sortBy;
                     this.sorting.sortAscending = true;
                 }
-                this.updateList();
             });
-        });
+        }
 
         let showFinishedCheckbox = document.getElementById('show-finished-checkbox');
         showFinishedCheckbox.addEventListener('click', () => {
@@ -138,15 +136,15 @@ class List {
 
     registerListEvents() {
         let deleteLinks = document.getElementsByName('delete-link');
-        deleteLinks.forEach((deleteLink) => {
+        for (let deleteLink of deleteLinks) {
             let noteId = deleteLink.getAttribute('data-note-id');
             deleteLink.addEventListener('click', () => {
                 this.deleteNote(noteId);
             });
-        });
+        }
 
         let finishedCheckboxes = document.getElementsByName('finished-checkbox');
-        finishedCheckboxes.forEach((finishedCheckbox) => {
+        for (let finishedCheckbox of finishedCheckboxes) {
             let noteId = parseInt(finishedCheckbox.getAttribute('data-note-id'));
             finishedCheckbox.addEventListener('click', () => {
                 let finishDate;
@@ -161,7 +159,7 @@ class List {
 
                 this.updateFinishedDate(noteId, finishDate);
             });
-        });
+        }
     }
 
     updateFinishedDate(noteId, finished) {
@@ -184,7 +182,7 @@ class List {
 
     updateSortButtonIcons() {
         let sortButtons = document.getElementsByName('sort-link');
-        sortButtons.forEach((sortButton) => {
+        for (let sortButton of sortButtons) {
             let cssClass;
 
             if (sortButton.getAttribute('data-sort-by') == this.sorting.sortBy) {
@@ -198,7 +196,7 @@ class List {
             if (sortingIcon) {
                 this.replaceSortingCssClass(sortingIcon, ' ' + cssClass);
             }
-        });
+        }
     }
 
     replaceSortingCssClass(element, newCssClass) {
