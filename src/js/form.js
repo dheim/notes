@@ -107,7 +107,7 @@ class Form {
 
         let importanceFlashes = document.getElementsByName('importance-flash');
 
-        for (importanceFlash of importanceFlashes) {
+        for (let importanceFlash of importanceFlashes) {
            importanceFlash.addEventListener('click', () => {
                this.note.importance = parseInt(importanceFlash.getAttribute('data-importance'));
                this.applyNoteToForm();
