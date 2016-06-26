@@ -9,6 +9,10 @@ class Form {
     constructor() {
         this.noteService = new NoteService();
 
+        let pageStyle = localStorage.getItem('pageStyle') || 'black-white';
+        let body = document.getElementsByTagName('body')[0];
+        body.classList.add(pageStyle);
+
         this.formElements = {
             title: document.getElementById('title'),
             description: document.getElementById('description'),
@@ -95,12 +99,12 @@ class Form {
     }
 
     renderImportance() {
-        var divImportance = document.getElementById('importance');
+        let divImportance = document.getElementById('importance');
 
         let renderedImportance = '';
-        
+
         for (let i = 0; i < 5; i++) {
-            renderedImportance += `<a href="#" name="importance-flash" data-importance="${i + 1}"<span class="fa fa-bolt ${i < this.note.importance ? '' : 'grey'}" aria-hidden="true"></a>`;
+            renderedImportance += `<a href="#" name="importance-flash" data-importance="${i + 1}"<span class="fa fa-bolt ${i < this.note.importance ? '' : 'inactive'}" aria-hidden="true"></a>`;
         }
 
         divImportance.innerHTML = renderedImportance;
@@ -108,10 +112,10 @@ class Form {
         let importanceFlashes = document.getElementsByName('importance-flash');
 
         for (let importanceFlash of importanceFlashes) {
-           importanceFlash.addEventListener('click', () => {
-               this.note.importance = parseInt(importanceFlash.getAttribute('data-importance'));
-               this.applyNoteToForm();
-           }) ;
+            importanceFlash.addEventListener('click', () => {
+                this.note.importance = parseInt(importanceFlash.getAttribute('data-importance'));
+                this.applyNoteToForm();
+            });
         }
     }
 

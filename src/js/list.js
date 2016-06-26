@@ -39,6 +39,13 @@ class List {
         this.filter = {};
         this.sorting = {};
 
+        this.registerPageEvents();
+        this.applyPageStyle(localStorage.getItem('pageStyle') || 'black-white');
+
+        this.loadNotes();
+    }
+
+    loadNotes() {
         this.noteService.getAll()
             .then((response) => {
                 response.json().then((notes) => {
@@ -60,7 +67,6 @@ class List {
             displayFinished: true,
             searchTerm: ''
         };
-        this.registerPageEvents();
         this.updateList();
     }
 
@@ -134,6 +140,28 @@ class List {
             let searchTerm = searchInput.value;
             this.filterBySearchTerm(searchTerm);
         });
+
+        let styleSelect = document.getElementById('display-style');
+        styleSelect.addEventListener('change', () => {
+            let style = styleSelect.value;
+            this.updatePageStyle(style);
+        });
+    }
+
+    updatePageStyle(style) {
+        this.applyPageStyle(style);
+        localStorage.setItem('pageStyle', style);
+    }
+
+    applyPageStyle(style) {
+        let body = document.getElementsByTagName('body')[0];
+        for (let cssClass of body.classList) {
+            body.classList.remove(cssClass);
+        }
+        body.classList.add(style);
+
+        let styleSelect = document.getElementById('display-style');
+        styleSelect.value = style;
     }
 
     registerListEvents() {
