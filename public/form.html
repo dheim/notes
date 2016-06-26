@@ -11,14 +11,14 @@
         notes.
     </div>
     <div id="main">
-        <div id="form">
+        <form id="note-form">
             <div class="row">
                 <div class="label"><label for="title">Title</label></div>
-                <div><input id="title" type="text" autofocus required class="full-width"></div>
+                <div><input id="title" name="title" type="text" autofocus required class="full-width"></div>
             </div>
             <div class="row">
                 <div class="label"><label for="description">Beschreibung</label></div>
-                <div><textarea id="description" required class="full-width"></textarea></div>
+                <div><textarea id="description" name="description" required class="full-width"></textarea></div>
             </div>
             <div class="row">
                 <div class="label"><label>Wichtigkeit</label></div>
@@ -26,13 +26,13 @@
             </div>
             <div class="row">
                 <div class="label"><label for="due">Zu erledigen bis</label></div>
-                <div><input type="date" id="due"></div>
+                <div><input type="date" id="due" name="due"></div>
             </div>
             <div class="row">
-                <div class="label"><label for="due">Erledigt am</label></div>
-                <div><input type="date" id="finished"></div>
+                <div class="label"><label for="finished">Erledigt am</label></div>
+                <div><input type="date" id="finished" name="finished"></div>
             </div>
-        </div>
+        </form>
     </div>
     <div id="footer">
         <div>

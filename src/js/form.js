@@ -7,19 +7,10 @@ import 'theme/form';
 class Form {
 
     constructor() {
+        this.formElement = document.getElementById('note-form');
         this.noteService = new NoteService();
 
-        let pageStyle = localStorage.getItem('pageStyle') || 'black-white';
-        let body = document.getElementsByTagName('body')[0];
-        body.classList.add(pageStyle);
-
-        this.formElements = {
-            title: document.getElementById('title'),
-            description: document.getElementById('description'),
-            due: document.getElementById('due'),
-            finished: document.getElementById('finished')
-        };
-
+        this.updatePageStyle();
         this.registerEvents();
 
         let id = this.getUrlQueryParameter('id');
@@ -28,6 +19,12 @@ class Form {
         } else {
             this.note = {};
         }
+    }
+
+    updatePageStyle() {
+        let pageStyle = localStorage.getItem('pageStyle') || 'black-white';
+        let body = document.getElementsByTagName('body')[0];
+        body.classList.add(pageStyle);
     }
 
     registerEvents() {
@@ -64,28 +61,28 @@ class Form {
     }
 
     applyNoteToForm() {
-        for (let key in this.formElements) {
-            if (this.formElements.hasOwnProperty(key) && this.note[key]) {
-                this.formElements[key].value = this.note[key];
+        for (let key in this.note) {
+            var formField = this.formElement.elements[key];
+            if (formField) {
+                formField.value = this.note[key];
             }
         }
         this.renderImportance();
     }
 
     applyFormDataToNote() {
-        for (let key in this.formElements) {
-            if (this.formElements.hasOwnProperty(key) && this.formElements[key].value) {
-                this.note[key] = this.formElements[key].value;
+        var formData = new FormData(this.formElement);
+
+        for (let formEntry of formData.entries()) {
+            let key = formEntry[0];
+            if (this.note.hasOwnProperty(key)) {
+                this.note[key] = formData.get(key);
             }
         }
     }
 
     saveNote() {
         this.applyFormDataToNote();
-
-        // TODO
-        //formselector;
-        //let formData = FormData(formselector);
 
         this.noteService.save(this.note)
             .then(response => response.json)
