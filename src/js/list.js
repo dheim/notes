@@ -2,6 +2,8 @@ import io from 'socket.io-client';
 import NoteService from './NoteService';
 import 'theme/list';
 require('font-awesome-webpack');
+require('babel-polyfill');
+require('nodep-date-input-polyfill');
 
 let socket = io('http://localhost:3000');
 
@@ -37,6 +39,13 @@ class List {
         this.filter = {};
         this.sorting = {};
 
+        this.registerPageEvents();
+        this.applyPageStyle(localStorage.getItem('pageStyle') || 'black-white');
+
+        this.loadNotes();
+    }
+
+    loadNotes() {
         this.noteService.getAll()
             .then((response) => {
                 response.json().then((notes) => {
@@ -58,7 +67,6 @@ class List {
             displayFinished: true,
             searchTerm: ''
         };
-        this.registerPageEvents();
         this.updateList();
     }
 
@@ -109,19 +117,17 @@ class List {
 
     registerPageEvents() {
         let sortLinks = document.getElementsByName('sort-link');
-        sortLinks.forEach((sortLink) => {
+        for (let sortLink of sortLinks) {
             sortLink.addEventListener('click', () => {
                 let sortBy = sortLink.getAttribute('data-sort-by');
-
                 if (sortBy == this.sorting.sortBy) {
                     this.sorting.sortAscending = !this.sorting.sortAscending;
                 } else {
                     this.sorting.sortBy = sortBy;
                     this.sorting.sortAscending = true;
                 }
-                this.updateList();
             });
-        });
+        }
 
         let showFinishedCheckbox = document.getElementById('show-finished-checkbox');
         showFinishedCheckbox.addEventListener('click', () => {
@@ -134,19 +140,41 @@ class List {
             let searchTerm = searchInput.value;
             this.filterBySearchTerm(searchTerm);
         });
+
+        let styleSelect = document.getElementById('display-style');
+        styleSelect.addEventListener('change', () => {
+            let style = styleSelect.value;
+            this.updatePageStyle(style);
+        });
+    }
+
+    updatePageStyle(style) {
+        this.applyPageStyle(style);
+        localStorage.setItem('pageStyle', style);
+    }
+
+    applyPageStyle(style) {
+        let body = document.getElementsByTagName('body')[0];
+        for (let cssClass of body.classList) {
+            body.classList.remove(cssClass);
+        }
+        body.classList.add(style);
+
+        let styleSelect = document.getElementById('display-style');
+        styleSelect.value = style;
     }
 
     registerListEvents() {
         let deleteLinks = document.getElementsByName('delete-link');
-        deleteLinks.forEach((deleteLink) => {
+        for (let deleteLink of deleteLinks) {
             let noteId = deleteLink.getAttribute('data-note-id');
             deleteLink.addEventListener('click', () => {
                 this.deleteNote(noteId);
             });
-        });
+        }
 
         let finishedCheckboxes = document.getElementsByName('finished-checkbox');
-        finishedCheckboxes.forEach((finishedCheckbox) => {
+        for (let finishedCheckbox of finishedCheckboxes) {
             let noteId = parseInt(finishedCheckbox.getAttribute('data-note-id'));
             finishedCheckbox.addEventListener('click', () => {
                 let finishDate;
@@ -161,7 +189,7 @@ class List {
 
                 this.updateFinishedDate(noteId, finishDate);
             });
-        });
+        }
     }
 
     updateFinishedDate(noteId, finished) {
@@ -184,7 +212,7 @@ class List {
 
     updateSortButtonIcons() {
         let sortButtons = document.getElementsByName('sort-link');
-        sortButtons.forEach((sortButton) => {
+        for (let sortButton of sortButtons) {
             let cssClass;
 
             if (sortButton.getAttribute('data-sort-by') == this.sorting.sortBy) {
@@ -198,7 +226,7 @@ class List {
             if (sortingIcon) {
                 this.replaceSortingCssClass(sortingIcon, ' ' + cssClass);
             }
-        });
+        }
     }
 
     replaceSortingCssClass(element, newCssClass) {

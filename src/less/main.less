@@ -1,76 +1,113 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    margin: 10px;
-    font-family: Helvetica, sans-serif;
-    font-size: 14px;
-    cursor: default;
+  margin: 10px;
+  font-family: Helvetica, sans-serif;
+  font-size: 14px;
+  cursor: default;
 }
 
 a {
-    color: black;
-    text-decoration: none;
+  color: black;
+  text-decoration: none;
 }
 
 #container {
-    width: 100%;
-    max-width: 800px;
-    margin: auto;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
 }
 
 #header {
-    text-align: right;
-    font-size: 3em;
-    padding-bottom: 10px;
+  text-align: right;
+  font-size: 3em;
+  padding-bottom: 10px;
 }
 
 #footer {
-    border-top: solid black 1px;
-    text-align: right;
-    padding-top: 10px;
+  border-top: solid black 1px;
+  text-align: right;
+  padding-top: 10px;
 }
 
 #toolbar {
-    display: flex;
-    border-bottom: solid black 2px;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
+  display: flex;
+  border-bottom: solid black 2px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .toolbar-element {
-    flex: 0 1 auto;
-    padding-right: 15px;
+  flex: 0 1 auto;
+  padding-right: 15px;
 }
 
-.toolbar-element>ul>li {
-    padding-right: 10px;
+.toolbar-element > ul > li {
+  padding-right: 10px;
 }
 
 #toolbar-search {
-    flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
 #sort {
-    flex: 0 1 auto;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+  flex: 0 1 auto;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
 }
 
 #sort li {
-    display: inline;
+  display: inline;
 }
 
-.fullWidth {
-    width: 100%;
+.full-width {
+  width: 100%;
 }
 
-.grey {
-    color: #aaaaaa;
+.inactive {
+  color: #aaaaaa;
 }
 
 #description {
-    height: 100px;
+  height: 100px;
+}
+
+.ocean-blue {
+  background-color: #000029;
+  color: #cefcff;
+}
+
+.ocean-blue a {
+  color: #cefcff;
+}
+
+.ocean-blue #toolbar {
+  border-bottom-color: #cefcff;
+}
+
+.ocean-blue #footer {
+  border-top-color: #cefcff;
+}
+
+.ocean-blue .inactive {
+  color: #0f33dc;
+}
+
+#note-form {
+
+  .row {
+    padding-bottom: 10px;
+  }
+
+  .label {
+    margin-bottom: 2px;
+  }
+
+  #importance {
+    font-size: 1.8em;
+    letter-spacing: 5px;
+  }
 }

@@ -1,3 +1,5 @@
+require('whatwg-fetch');
+
 class NoteService {
     constructor() {
         this.baseUrl = 'http://localhost:3000/api/note';

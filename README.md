@@ -1,4 +1,3 @@
 # notes
 
-## build
-npm run build
+npm install && node server/server.js

@@ -1,19 +1,16 @@
 require('font-awesome-webpack');
+require('babel-polyfill');
+require('nodep-date-input-polyfill');
 import NoteService from './NoteService';
 import 'theme/form';
 
 class Form {
 
     constructor() {
+        this.formElement = document.getElementById('note-form');
         this.noteService = new NoteService();
 
-        this.formElements = {
-            title: document.getElementById('title'),
-            description: document.getElementById('description'),
-            due: document.getElementById('due'),
-            finished: document.getElementById('finished')
-        };
-
+        this.updatePageStyle();
         this.registerEvents();
 
         let id = this.getUrlQueryParameter('id');
@@ -22,6 +19,12 @@ class Form {
         } else {
             this.note = {};
         }
+    }
+
+    updatePageStyle() {
+        let pageStyle = localStorage.getItem('pageStyle') || 'black-white';
+        let body = document.getElementsByTagName('body')[0];
+        body.classList.add(pageStyle);
     }
 
     registerEvents() {
@@ -58,28 +61,28 @@ class Form {
     }
 
     applyNoteToForm() {
-        for (let key in this.formElements) {
-            if (this.formElements.hasOwnProperty(key) && this.note[key]) {
-                this.formElements[key].value = this.note[key];
+        for (let key in this.note) {
+            var formField = this.formElement.elements[key];
+            if (formField) {
+                formField.value = this.note[key];
             }
         }
         this.renderImportance();
     }
 
     applyFormDataToNote() {
-        for (let key in this.formElements) {
-            if (this.formElements.hasOwnProperty(key) && this.formElements[key].value) {
-                this.note[key] = this.formElements[key].value;
+        var formData = new FormData(this.formElement);
+
+        for (let formEntry of formData.entries()) {
+            let key = formEntry[0];
+            if (this.note.hasOwnProperty(key)) {
+                this.note[key] = formData.get(key);
             }
         }
     }
 
     saveNote() {
         this.applyFormDataToNote();
-
-        // TODO
-        //formselector;
-        //let formData = FormData(formselector);
 
         this.noteService.save(this.note)
             .then(response => response.json)
@@ -93,24 +96,24 @@ class Form {
     }
 
     renderImportance() {
-        var divImportance = document.getElementById('importance');
+        let divImportance = document.getElementById('importance');
 
         let renderedImportance = '';
-        
+
         for (let i = 0; i < 5; i++) {
-            renderedImportance += `<a href="#" name="importance-flash" data-importance="${i + 1}"<span class="fa fa-bolt ${i < this.note.importance ? '' : 'grey'}" aria-hidden="true"></a>`;
+            renderedImportance += `<a href="#" name="importance-flash" data-importance="${i + 1}"<span class="fa fa-bolt ${i < this.note.importance ? '' : 'inactive'}" aria-hidden="true"></a>`;
         }
 
         divImportance.innerHTML = renderedImportance;
 
         let importanceFlashes = document.getElementsByName('importance-flash');
 
-        importanceFlashes.forEach((importanceFlash) => {
-           importanceFlash.addEventListener('click', () => {
-               this.note.importance = parseInt(importanceFlash.getAttribute('data-importance'));
-               this.applyNoteToForm();
-           }) ;
-        });
+        for (let importanceFlash of importanceFlashes) {
+            importanceFlash.addEventListener('click', () => {
+                this.note.importance = parseInt(importanceFlash.getAttribute('data-importance'));
+                this.applyNoteToForm();
+            });
+        }
     }
 
     getUrlQueryParameter(name) {
