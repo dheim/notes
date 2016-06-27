@@ -1,6 +1,6 @@
 class NoteService {
     constructor() {
-        this.baseUrl = 'http://dev.local:3000/api/note';
+        this.baseUrl = 'http://localhost:3000/api/note';
     }
 
     get(id) {

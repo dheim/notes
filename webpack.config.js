@@ -49,6 +49,11 @@ module.exports = {
   },
   plugins: [
     new ExtractTextPlugin('css/list.css'),
-    new ExtractTextPlugin('css/form.css')
+    new ExtractTextPlugin('css/form.css'),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    })
   ]
 };

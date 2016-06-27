@@ -3,7 +3,7 @@ import NoteService from './NoteService';
 import 'theme/list';
 require('font-awesome-webpack');
 
-let socket = io('http://dev.local:3000');
+let socket = io('http://localhost:3000');
 
     socket.on('added', (note) => {
         listInstance.allNotes.push(note);
