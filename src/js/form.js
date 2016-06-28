@@ -75,9 +75,7 @@ class Form {
 
         for (let formEntry of formData.entries()) {
             let key = formEntry[0];
-            if (this.note.hasOwnProperty(key)) {
-                this.note[key] = formData.get(key);
-            }
+            this.note[key] = formData.get(key);
         }
     }
 

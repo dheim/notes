@@ -126,6 +126,7 @@ class List {
                     this.sorting.sortBy = sortBy;
                     this.sorting.sortAscending = true;
                 }
+                this.sortList();
             });
         }
 
