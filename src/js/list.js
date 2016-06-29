@@ -5,7 +5,7 @@ require('font-awesome-webpack');
 require('babel-polyfill');
 require('nodep-date-input-polyfill');
 
-let socket = io('http://localhost:3000');
+let socket = io(`http://${window.location.hostname}:3000`);
 
     socket.on('added', (note) => {
         listInstance.allNotes.push(note);

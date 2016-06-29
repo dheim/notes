@@ -2,7 +2,7 @@ require('whatwg-fetch');
 
 class NoteService {
     constructor() {
-        this.baseUrl = 'http://localhost:3000/api/note';
+        this.baseUrl = `http://${window.location.hostname}:3000/api/note`;
     }
 
     get(id) {
